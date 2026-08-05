@@ -1,0 +1,27 @@
+package com.nixtap.profileservice.mapper;
+
+import com.nixtap.profileservice.dto.request.UserProfileRequest;
+import com.nixtap.profileservice.dto.response.UserProfileResponse;
+import com.nixtap.profileservice.entity.UserProfile;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+
+@Mapper(componentModel = "spring")
+public interface UserProfileMapper {
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "isPublic", source = "public")
+    UserProfile toEntity(UserProfileRequest request);
+
+    @Mapping(target = "isPublic", source = "public")
+    UserProfileResponse toResponse(UserProfile entity);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "userId", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "public", source = "public")
+    void updateEntityFromRequest(UserProfileRequest request, @org.mapstruct.MappingTarget UserProfile entity);
+}
