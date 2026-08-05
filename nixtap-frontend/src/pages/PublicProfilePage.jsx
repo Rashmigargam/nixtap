@@ -278,6 +278,11 @@ const PublicProfilePage = ({ defaultTab = 'overview' }) => {
                   <i className="bi bi-chat-square-heart-fill text-purple me-1.5"></i> Leave Feedback
                 </button>
 
+                <Link to={`/${rawIdentifier}/qr`}
+                  className="btn btn-sm bg-white text-dark border border-slate-200 rounded-pill px-4 py-2.5 small fw-bold shadow-sm transition-all">
+                  <i className="bi bi-qr-code-scan text-purple me-1.5"></i> View QR Code
+                </Link>
+
                 {resume?.resumeUrl && (
                   <a href={resume.resumeUrl} target="_blank" rel="noreferrer"
                     className="btn btn-sm bg-white text-dark border border-slate-200 rounded-pill px-4 py-2.5 small fw-bold shadow-sm">

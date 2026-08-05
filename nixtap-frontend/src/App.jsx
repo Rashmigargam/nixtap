@@ -17,6 +17,7 @@ import AnalyticsDashboardPage from './pages/AnalyticsDashboardPage';
 import AdminDashboardPage from './pages/AdminDashboardPage';
 import PublicCardPage from './pages/PublicCardPage';
 import PublicProfilePage from './pages/PublicProfilePage';
+import PublicQrPage from './pages/PublicQrPage';
 
 import MeetingsPage from './pages/MeetingsPage';
 import FeedbackPage from './pages/FeedbackPage';
@@ -66,6 +67,14 @@ function App() {
             element={
               <ErrorBoundary moduleName="Public Username Cards Showcase">
                 <PublicProfilePage defaultTab="cards" />
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path="/:username/qr"
+            element={
+              <ErrorBoundary moduleName="Public Username QR Studio">
+                <PublicQrPage />
               </ErrorBoundary>
             }
           />
