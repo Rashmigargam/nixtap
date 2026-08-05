@@ -26,7 +26,7 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> 
-                    auth.requestMatchers("/api/v1/cards/public/**").permitAll()
+                    auth.requestMatchers("/api/v1/cards/public/**", "/api/v1/cards/user/**").permitAll()
                         // NFC tap lookup — no auth needed
                         .requestMatchers(org.springframework.http.HttpMethod.GET,
                                 "/api/v1/nfc/tags/uid/**").permitAll()

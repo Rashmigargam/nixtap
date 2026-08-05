@@ -90,22 +90,17 @@ export const getAdminMetrics = async () => {
   }
 };
 
-// 7. getAllUsers(page, size) -> GET /api/v1/admin/users
 export const getAllUsers = async (page = 0, size = 20) => {
   try {
     const res = await api.get('/api/v1/admin/users', { params: { page, size } });
     const content = res.data?.data?.content || res.data?.data;
-    if (Array.isArray(content) && content.length > 0) {
+    if (Array.isArray(content)) {
       return { data: content };
     }
-    // Fallback if backend user management endpoint is not yet populated
-    return {
-      data: MOCK_ADMIN_USERS,
-    };
+    return { data: [] };
   } catch (err) {
-    return {
-      data: MOCK_ADMIN_USERS,
-    };
+    console.warn('Failed to fetch real users from admin-service:', err);
+    return { data: [] };
   }
 };
 

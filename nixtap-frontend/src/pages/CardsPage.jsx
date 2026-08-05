@@ -179,14 +179,16 @@ const CardsPage = () => {
       <div className="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4 gap-3">
         <div>
           <div className="d-flex align-items-center gap-2 mb-1">
-            <h2 className="fw-extrabold text-dark mb-0 fs-3" style={{ letterSpacing: '-0.02em' }}>Digital Business Cards</h2>
-            <span className="badge bg-pastel-lavender text-purple rounded-pill fw-bold">Card Studio</span>
+            <h2 className="fw-extrabold text-dark mb-0 fs-3" style={{ fontFamily: "'Outfit', sans-serif", letterSpacing: '-0.02em' }}>
+              Digital <span style={{ color: '#7C3AED' }}>Business Cards</span>
+            </h2>
+            <span className="badge rounded-pill extra-small px-3 py-1.5 fw-bold text-purple" style={{ background: '#EDE9FE' }}>Card Studio</span>
           </div>
           <p className="text-secondary small mb-0">Create, customize, and program NFC & QR cards for your professional identity.</p>
         </div>
         <button
           onClick={() => setBuildingCard('new')}
-          className="btn bg-pastel-purple text-white fw-bold px-4 py-2.5 rounded-pill shadow-sm d-inline-flex align-items-center gap-2 small"
+          className="btn text-white fw-bold px-4 py-2.5 rounded-pill shadow-sm d-inline-flex align-items-center gap-2 small border-0"
           style={{ background: '#7C3AED' }}
         >
           <i className="bi bi-plus-lg"></i>
@@ -197,36 +199,45 @@ const CardsPage = () => {
       {/* Recommended Categories Section */}
       <div className="mb-4">
         <div className="d-flex align-items-center justify-content-between mb-3">
-          <h6 className="fw-bold text-dark mb-0">Recommended categories</h6>
-          <button className="btn btn-sm text-secondary p-0 fw-bold extra-small">View all</button>
+          <h6 className="fw-extrabold text-dark mb-0" style={{ fontFamily: "'Outfit', sans-serif" }}>Recommended categories</h6>
         </div>
         <div className="row g-3">
           {[
-            { title: 'Create Card', icon: 'bi-card-heading', color: 'bg-pastel-purple text-purple' },
-            { title: 'Link NFC Tag', icon: 'bi-nfc', color: 'bg-pastel-cyan text-info' },
-            { title: 'Generate QR', icon: 'bi-qr-code-scan', color: 'bg-pastel-mint text-success' },
-            { title: 'View Telemetry', icon: 'bi-bar-chart', color: 'bg-pastel-soft-yellow text-warning' },
-            { title: 'Card Templates', icon: 'bi-palette', color: 'bg-pastel-lavender text-purple' },
-            { title: 'Social Links', icon: 'bi-share', color: 'bg-pastel-mint text-success' },
-            { title: 'vCard Export', icon: 'bi-person-badge', color: 'bg-pastel-cyan text-info' },
-            { title: 'Security Pass', icon: 'bi-shield-check', color: 'bg-pastel-soft-yellow text-warning' },
-          ].map((cat, idx) => (
-            <div key={idx} className="col-6 col-sm-4 col-md-3 col-xl-1-5">
-              <div className="category-quick-card bg-white p-3 rounded-4 border border-slate-200 shadow-xs h-100 d-flex align-items-center gap-3">
-                <span className={`p-2.5 rounded-circle ${cat.color} d-inline-flex align-items-center justify-content-center`} style={{ width: '38px', height: '38px' }}>
-                  <i className={`bi ${cat.icon} fs-5`}></i>
-                </span>
-                <span className="fw-bold text-dark extra-small lh-sm">{cat.title}</span>
+            { title: 'Create Card', icon: 'bi-card-heading', color: 'text-purple', bg: '#EDE9FE' },
+            { title: 'Link NFC Tag', icon: 'bi-nfc', color: 'text-info', bg: '#E0F2FE' },
+            { title: 'Generate QR', icon: 'bi-qr-code-scan', color: 'text-success', bg: '#DCFCE7' },
+            { title: 'Card Templates', icon: 'bi-palette', color: 'text-purple', bg: '#F3E8FF' },
+            { title: 'Social Links', icon: 'bi-share', color: 'text-success', bg: '#E0E7FF' },
+          ].map((cat, i) => (
+            <div key={i} className="col-6 col-md-4 col-lg-2.4 col-xl-2">
+              <div 
+                className="p-3 rounded-4 border border-slate-200 bg-white text-center h-100 shadow-sm transition-all hover-translate-y cursor-pointer"
+                onClick={() => setBuildingCard('new')}
+              >
+                <div 
+                  className={`rounded-circle p-2.5 d-inline-flex align-items-center justify-content-center mb-2`}
+                  style={{ background: cat.bg }}
+                >
+                  <i className={`bi ${cat.icon} fs-5 ${cat.color}`}></i>
+                </div>
+                <div className="fw-bold extra-small text-dark">{cat.title}</div>
               </div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Main Task List & Sidebar Layout */}
+      {/* Cards List Section */}
+      <div className="d-flex align-items-center justify-content-between mb-3">
+        <h5 className="fw-extrabold text-dark mb-0" style={{ fontFamily: "'Outfit', sans-serif" }}>Your Active Cards</h5>
+        <span className="badge rounded-pill extra-small px-3 py-1.5 fw-bold text-purple" style={{ background: '#EDE9FE' }}>
+          {cards.length} Total
+        </span>
+      </div>
+
+      {/* Main Task List Layout */}
       <div className="row g-4">
-        {/* Left Column: Cards List Board */}
-        <div className="col-12 col-lg-8 col-xl-9">
+        <div className="col-12">
           {/* Toolbar Control */}
           <div className="d-flex flex-wrap align-items-center justify-content-between mb-3 gap-2 bg-white p-3 rounded-4 border border-slate-200 shadow-xs">
             <div className="d-flex align-items-center gap-2">
@@ -288,16 +299,16 @@ const CardsPage = () => {
                     <div key={card.id} className="bg-white p-3.5 rounded-4 border border-slate-200 shadow-xs hover-card transition-all">
                       <div className="row align-items-center g-3">
                         {/* Title & Info */}
-                        <div className="col-12 col-md-4">
+                        <div className="col-12 col-lg-5">
                           <div className="d-flex align-items-center gap-3">
                             <div
-                              className="rounded-3 p-2 text-white fw-bold d-inline-flex align-items-center justify-content-center flex-shrink-0"
-                              style={{ width: '42px', height: '42px', background: card.customGradient || 'linear-gradient(135deg, #7C3AED 0%, #4338CA 100%)' }}
+                              className="rounded-3 p-2 text-white fw-bold d-inline-flex align-items-center justify-content-center flex-shrink-0 shadow-sm"
+                              style={{ width: '40px', height: '40px', background: card.customGradient || 'linear-gradient(135deg, #7C3AED 0%, #4338CA 100%)' }}
                             >
                               {(card.cardTitle || 'C').charAt(0).toUpperCase()}
                             </div>
                             <div className="overflow-hidden">
-                              <h6 className="fw-bold text-dark mb-0 text-truncate">{card.cardTitle}</h6>
+                              <h6 className="fw-extrabold text-dark mb-0.5 text-truncate" style={{ fontFamily: "'Outfit', sans-serif" }}>{card.cardTitle}</h6>
                               <div className="extra-small text-muted text-truncate">
                                 {card.designation || 'Professional'} {card.company ? `@ ${card.company}` : ''}
                               </div>
@@ -306,13 +317,13 @@ const CardsPage = () => {
                         </div>
 
                         {/* Badges & Metrics */}
-                        <div className="col-12 col-md-5">
-                          <div className="d-flex align-items-center gap-2.5 flex-wrap">
-                            <span className="extra-small text-muted d-inline-flex align-items-center gap-1">
+                        <div className="col-12 col-lg-4">
+                          <div className="d-flex align-items-center gap-2 flex-wrap">
+                            <span className="extra-small text-secondary d-inline-flex align-items-center gap-1">
                               <i className="bi bi-paperclip"></i> {12 + index * 3}
                             </span>
-                            <span className="extra-small text-muted d-inline-flex align-items-center gap-1">
-                              <i className="bi bi-chat"></i> {21 + index * 5}
+                            <span className="extra-small text-secondary d-inline-flex align-items-center gap-1 me-1">
+                              <i className="bi bi-chat-dots"></i> {21 + index * 5}
                             </span>
                             <span className={`badge-status ${statusClass}`}>
                               {statusText}
@@ -320,23 +331,23 @@ const CardsPage = () => {
                             <span className={`badge-priority ${priorityClass}`}>
                               {priorityText}
                             </span>
-                            <span className="extra-small text-muted ms-auto me-2 fw-semibold">
+                            <span className="extra-small text-muted ms-auto me-1 fw-semibold">
                               {card.viewsCount || 0} Taps
                             </span>
                           </div>
                         </div>
 
                         {/* Progress & Actions */}
-                        <div className="col-12 col-md-3">
+                        <div className="col-12 col-lg-3">
                           <div className="d-flex align-items-center justify-content-end gap-3">
                             <div className="w-100" style={{ maxWidth: '90px' }}>
                               <div className="d-flex justify-content-between extra-small text-muted mb-1">
                                 <span>Views</span>
                                 <span className="fw-bold text-dark">{progressPct}%</span>
                               </div>
-                              <div className="progress rounded-pill" style={{ height: '5px' }}>
+                              <div className="progress rounded-pill bg-slate-100" style={{ height: '6px' }}>
                                 <div
-                                  className="progress-bar bg-purple rounded-pill"
+                                  className="progress-bar rounded-pill"
                                   role="progressbar"
                                   style={{ width: `${progressPct}%`, background: '#7C3AED' }}
                                 ></div>
@@ -345,7 +356,7 @@ const CardsPage = () => {
 
                             <div className="dropdown">
                               <button
-                                className="btn btn-sm btn-light rounded-circle p-0 d-inline-flex align-items-center justify-content-center text-secondary"
+                                className="btn btn-sm btn-light rounded-circle p-0 d-inline-flex align-items-center justify-content-center text-secondary border border-slate-200"
                                 style={{ width: '32px', height: '32px' }}
                                 type="button"
                                 data-bs-toggle="dropdown"
@@ -398,39 +409,11 @@ const CardsPage = () => {
             {/* Dashed Add Card Row */}
             <button
               onClick={() => setBuildingCard('new')}
-              className="btn w-100 mt-2 py-3 bg-white rounded-4 border-2 border-dashed border-slate-300 text-secondary fw-bold extra-small d-flex align-items-center justify-content-center gap-2 hover-card"
+              className="btn w-100 mt-3 py-3.5 bg-white rounded-4 text-secondary fw-bold extra-small d-flex align-items-center justify-content-center gap-2 transition-all"
+              style={{ border: '2px dashed #E2E8F0' }}
             >
-              <i className="bi bi-plus-lg"></i>
+              <i className="bi bi-plus-lg text-purple"></i>
               <span>Add New Digital Card</span>
-            </button>
-          </div>
-        </div>
-
-        {/* Right Column: Upgrade Promo Card */}
-        <div className="col-12 col-lg-4 col-xl-3">
-          <div className="sidebar-upgrade-card sticky-top" style={{ top: '80px' }}>
-            <div className="d-flex align-items-center gap-2 mb-2">
-              <span className="p-2 rounded-circle bg-white text-dark d-inline-flex align-items-center justify-content-center shadow-xs" style={{ width: '32px', height: '32px' }}>
-                <i className="bi bi-rocket-takeoff-fill fs-6"></i>
-              </span>
-              <h6 className="fw-extrabold text-white mb-0">Upgrade your plan</h6>
-            </div>
-            <p className="extra-small text-white-75 mb-3">
-              Your free trial plan ends in 12 days. Upgrade to Pro for unlimited card creations, custom domains, and NFC telemetry.
-            </p>
-
-            <div className="mb-3">
-              <div className="d-flex justify-content-between extra-small text-white-75 mb-1">
-                <span>Trial Progress</span>
-                <span className="fw-bold text-white">60%</span>
-              </div>
-              <div className="progress rounded-pill bg-white bg-opacity-20" style={{ height: '6px' }}>
-                <div className="progress-bar bg-white rounded-pill" style={{ width: '60%' }}></div>
-              </div>
-            </div>
-
-            <button className="btn btn-light text-purple fw-extrabold w-100 rounded-pill py-2.5 extra-small shadow-sm">
-              See plans ↗
             </button>
           </div>
         </div>

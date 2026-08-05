@@ -12,16 +12,13 @@ public interface UserProfileMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
-    @Mapping(target = "isPublic", source = "public")
     UserProfile toEntity(UserProfileRequest request);
 
-    @Mapping(target = "isPublic", source = "public")
     UserProfileResponse toResponse(UserProfile entity);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "userId", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
-    @Mapping(target = "public", source = "public")
     void updateEntityFromRequest(UserProfileRequest request, @org.mapstruct.MappingTarget UserProfile entity);
 }

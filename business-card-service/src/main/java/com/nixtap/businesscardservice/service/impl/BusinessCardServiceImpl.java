@@ -114,10 +114,6 @@ public class BusinessCardServiceImpl implements BusinessCardService {
     @Override
     @Transactional(readOnly = true)
     public List<BusinessCardResponse> getCardsByUserId(Long userId) {
-        Long callerId = getAuthenticatedUserId();
-        if (!userId.equals(callerId)) {
-            throw new CardAccessDeniedException("You can only view your own business cards.");
-        }
         return cardRepository.findByUserId(userId)
                 .stream()
                 .map(cardMapper::toResponse)

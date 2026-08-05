@@ -63,21 +63,20 @@ public class AuthServiceImpl implements AuthService {
         User user = userMapper.registerRequestToUser(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRole(Role.USER); // always USER — role elevation done by admin only
-        user.setEnabled(true);  // explicitly enable new accounts
+        user.setEnabled(false);       // ACCOUNT IS DISABLED UNTIL OTP VERIFICATION
+        user.setEmailVerified(false); // EMAIL IS NOT VERIFIED YET
 
-        user.setVerificationCode(UUID.randomUUID().toString());
+        // Generate 6-digit numeric OTP code
+        String otpCode = String.format("%06d", new java.util.Random().nextInt(1000000));
+        user.setVerificationCode(otpCode);
         User savedUser = Objects.requireNonNull(userRepository.save(user), "Saved user cannot be null");
 
-        // Send verification email (non-blocking — failure won't break registration)
-        emailService.sendVerificationEmail(savedUser.getEmail(), savedUser.getVerificationCode());
-
-        String accessToken = jwtUtil.generateTokenFromEmailRoleAndUserId(
-                savedUser.getEmail(), "ROLE_" + savedUser.getRole().name(), savedUser.getId());
-        RefreshToken refreshToken = createRefreshToken(savedUser.getId());
+        // Send OTP verification email
+        emailService.sendVerificationEmail(savedUser.getEmail(), otpCode);
 
         return AuthResponse.builder()
-                .accessToken(accessToken)
-                .refreshToken(refreshToken.getToken())
+                .accessToken(null)
+                .refreshToken(null)
                 .tokenType("Bearer")
                 .userId(savedUser.getId())
                 .email(savedUser.getEmail())
@@ -150,8 +149,9 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public void verifyEmail(String token) {
         User user = userRepository.findByVerificationCode(token)
-                .orElseThrow(() -> new BadRequestException("Invalid email verification token"));
+                .orElseThrow(() -> new BadRequestException("Invalid or expired OTP verification code"));
 
+        user.setEnabled(true);
         user.setEmailVerified(true);
         user.setVerificationCode(null);
         userRepository.save(user);

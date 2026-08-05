@@ -97,7 +97,11 @@ public class AdminServiceImpl implements AdminService {
     public PagedResponse<UserSummary> getUsers(int page, int size) {
         try {
             int offset = page * size;
-            String sql = "SELECT id, full_name, email, role, is_enabled FROM auth_db.users ORDER BY id DESC LIMIT ? OFFSET ?";
+            String sql = "SELECT u.id, u.full_name, u.email, u.role, u.is_enabled, " +
+                         "p.username, p.is_public, p.designation, p.company, p.profile_image " +
+                         "FROM auth_db.users u " +
+                         "LEFT JOIN profile_db.user_profiles p ON u.id = p.user_id " +
+                         "ORDER BY u.id DESC LIMIT ? OFFSET ?";
             List<UserSummary> list = jdbcTemplate.query(sql, (rs, rowNum) -> {
                 UserSummary u = new UserSummary();
                 u.setId(rs.getLong("id"));
@@ -105,6 +109,14 @@ public class AdminServiceImpl implements AdminService {
                 u.setEmail(rs.getString("email"));
                 u.setRole(rs.getString("role"));
                 u.setEnabled(rs.getBoolean("is_enabled"));
+                u.setUsername(rs.getString("username"));
+                
+                Boolean pub = rs.getObject("is_public") != null ? rs.getBoolean("is_public") : true;
+                u.setPublic(pub);
+                
+                u.setDesignation(rs.getString("designation"));
+                u.setCompany(rs.getString("company"));
+                u.setProfileImage(rs.getString("profile_image"));
                 return u;
             }, size, offset);
             Long total = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM auth_db.users", Long.class);
@@ -116,7 +128,7 @@ public class AdminServiceImpl implements AdminService {
             response.setSize(size);
             return response;
         } catch (Exception e) {
-            log.warn("Could not query auth_db.users directly: {}", e.getMessage());
+            log.warn("Could not query users with profiles directly: {}", e.getMessage());
             return new PagedResponse<>();
         }
     }

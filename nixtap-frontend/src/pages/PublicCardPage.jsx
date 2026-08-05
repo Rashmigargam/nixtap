@@ -65,7 +65,7 @@ const PLATFORM_ICONS = {
 const PublicCardPage = () => {
   const { cardId } = useParams();
 
-  const [card, setCard] = useState(MOCK_PUBLIC_CARD);
+  const [card, setCard] = useState(null);
   const [loading, setLoading] = useState(true);
   const [copiedShare, setCopiedShare] = useState(false);
 
@@ -92,17 +92,17 @@ const PublicCardPage = () => {
   const fetchPublicCardData = async () => {
     try {
       setLoading(true);
-      const res = await getPublicCard(cardId || '1');
+      const res = await getPublicCard(cardId);
       const data = res?.data || res;
-      if (data && data.fullName) {
-        setCard({
-          ...data,
-          featuredProjects: data.featuredProjects || MOCK_PUBLIC_CARD.featuredProjects,
-        });
+      if (data && (data.fullName || data.cardName)) {
+        setCard(data);
+        trackCardView(data);
+      } else {
+        setCard(null);
       }
-      trackCardView(data);
     } catch (err) {
-      console.warn('Using public mock card data:', err?.message);
+      console.warn('Public card fetch error:', err?.message);
+      setCard(null);
     } finally {
       setLoading(false);
     }
@@ -151,6 +151,32 @@ const PublicCardPage = () => {
       <div className="d-flex justify-content-center align-items-center vh-100 bg-light">
         <div className="spinner-border text-purple" role="status">
           <span className="visually-hidden">Loading Digital Business Card...</span>
+        </div>
+      </div>
+    );
+  }
+
+  // ── 404 SCREEN IF CARD / PROFILE DOES NOT EXIST ──
+  if (!card) {
+    return (
+      <div className="min-vh-100 d-flex flex-column bg-white text-dark" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+        <div className="container my-auto py-5 text-center">
+          <div className="p-5 rounded-5 border border-slate-200 shadow-sm mx-auto bg-light" style={{ maxWidth: '580px' }}>
+            <div className="rounded-circle bg-pastel-lavender text-purple d-inline-flex align-items-center justify-content-center mb-4"
+              style={{ width: '80px', height: '80px' }}>
+              <i className="bi bi-credit-card-2-front-fill fs-1 text-purple"></i>
+            </div>
+            <h2 className="fw-extrabold text-dark mb-2">Business Card Not Available</h2>
+            <p className="text-secondary small mb-4 leading-relaxed">
+              The requested digital business card or user profile does not exist in our database or has been deactivated.
+            </p>
+            <div className="d-flex align-items-center justify-content-center gap-3">
+              <Link to="/" className="btn btn-sm text-white fw-bold rounded-pill px-4 py-2.5 shadow-sm border-0"
+                style={{ background: '#7C3AED' }}>
+                <i className="bi bi-house-door me-1.5"></i> Return Home
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     );

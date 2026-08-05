@@ -83,20 +83,18 @@ const AdminDashboardPage = () => {
 
       if (metricsRes.status === 'fulfilled' && metricsRes.value?.data) {
         const raw = metricsRes.value.data;
-        setMetrics((prev) => ({
-          ...prev,
-          ...raw,
-          totalUsers: raw.totalUsers ?? prev?.totalUsers ?? 28,
-          activeCards: raw.activeCards ?? raw.totalCards ?? prev?.activeCards ?? 14,
-          totalScans: raw.totalScans ?? raw.totalAnalyticsEvents ?? prev?.totalScans ?? 142,
-          serverHealth: raw.serverHealth ?? prev?.serverHealth ?? '99.98%',
-        }));
+        setMetrics({
+          totalUsers: raw.totalUsers ?? 0,
+          activeCards: raw.totalCards ?? raw.activeCards ?? 0,
+          totalScans: raw.totalAnalyticsEvents ?? raw.totalScans ?? 0,
+          serverHealth: '99.99%',
+        });
       }
 
       if (usersRes.status === 'fulfilled' && usersRes.value) {
         const raw = usersRes.value.data ?? usersRes.value;
         const userList = Array.isArray(raw) ? raw : (Array.isArray(raw?.content) ? raw.content : null);
-        if (userList && userList.length > 0) {
+        if (Array.isArray(userList)) {
           setUsers(userList);
         }
       }
@@ -104,7 +102,7 @@ const AdminDashboardPage = () => {
       if (logsRes.status === 'fulfilled' && logsRes.value) {
         const raw = logsRes.value.data ?? logsRes.value;
         const logList = Array.isArray(raw) ? raw : (Array.isArray(raw?.content) ? raw.content : null);
-        if (logList && logList.length > 0) {
+        if (Array.isArray(logList)) {
           setLogs(logList);
         }
       }
@@ -234,30 +232,30 @@ const AdminDashboardPage = () => {
       )}
 
       {/* Hero Header Banner */}
-      <div className="bg-dark text-white pt-4 pb-5 mb-n4 shadow-sm position-relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #0F172A 0%, #1E1B4B 50%, #311042 100%)' }}>
+      <div className="py-4 border-bottom border-slate-200 bg-white position-relative mb-4">
         <div className="container-fluid px-lg-5">
           <div className="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
             <div>
-              <div className="d-flex align-items-center gap-2 mb-1">
-                <span className="badge bg-danger text-white rounded-pill extra-small px-3 py-1 fw-bold tracking-wider text-uppercase">
+              <div className="d-flex align-items-center gap-2 mb-2">
+                <span className="badge rounded-pill extra-small px-3 py-1.5 fw-bold text-danger border border-danger-subtle bg-danger-subtle">
                   <i className="bi bi-shield-check me-1"></i> Admin Command Center
                 </span>
-                <span className="badge bg-white bg-opacity-10 text-light rounded-pill extra-small px-2.5 py-1">
+                <span className="badge rounded-pill extra-small px-3 py-1.5 fw-bold text-purple" style={{ background: '#EDE9FE' }}>
                   13/13 Services Online
                 </span>
               </div>
-              <h1 className="fw-extrabold mb-1 fs-2 text-white" style={{ letterSpacing: '-0.03em' }}>
-                System Administration Control Panel
+              <h1 className="fw-extrabold mb-1 fs-3 text-dark" style={{ fontFamily: "'Outfit', sans-serif", letterSpacing: '-0.03em' }}>
+                System Administration <span style={{ color: '#7C3AED' }}>Control Panel</span>
               </h1>
-              <p className="text-slate-300 small mb-0">
-                Real-time microservice telemetry, platform user directory governance, and Spring Cloud security controls.
+              <p className="text-secondary small mb-0">
+                Platform user directory governance, microservice health monitoring, and Spring Cloud security controls.
               </p>
             </div>
 
             <div className="d-flex align-items-center gap-2">
               <button
                 onClick={fetchAdminData}
-                className="btn btn-outline-light rounded-pill px-3 py-2 small fw-semibold d-inline-flex align-items-center gap-1.5"
+                className="btn btn-outline-dark rounded-pill px-3.5 py-2 small fw-bold d-inline-flex align-items-center gap-1.5"
                 disabled={isRefreshing}
               >
                 <i className={`bi bi-arrow-clockwise ${isRefreshing ? 'spin-anim' : ''}`}></i>
@@ -265,8 +263,8 @@ const AdminDashboardPage = () => {
               </button>
               <button
                 onClick={() => setShowBroadcastModal(true)}
-                className="btn text-white fw-bold px-4 py-2 rounded-pill shadow-sm d-inline-flex align-items-center gap-2 small transition-all"
-                style={{ background: 'linear-gradient(135deg, #7C3AED 0%, #6366F1 100%)' }}
+                className="btn text-white fw-bold px-4 py-2.5 rounded-pill shadow-sm d-inline-flex align-items-center gap-2 small transition-all border-0"
+                style={{ background: '#7C3AED' }}
               >
                 <i className="bi bi-megaphone-fill"></i> Broadcast Push
               </button>
@@ -277,9 +275,9 @@ const AdminDashboardPage = () => {
 
       {/* Main Content Body */}
       <div className="container-fluid px-lg-5 mt-4">
-        {/* 4 Premium Metric Cards */}
+        {/* Metric Cards */}
         <div className="row g-3 mb-4">
-          <div className="col-12 col-sm-6 col-xl-3">
+          <div className="col-12 col-md-4">
             <div className="bg-white rounded-4 p-4 border border-slate-200 shadow-sm h-100 transition-all hover-elevate">
               <div className="d-flex align-items-center justify-content-between mb-3">
                 <span className="extra-small fw-bold text-uppercase tracking-wider text-purple" style={{ color: '#7C3AED' }}>Platform Users</span>
@@ -294,7 +292,7 @@ const AdminDashboardPage = () => {
             </div>
           </div>
 
-          <div className="col-12 col-sm-6 col-xl-3">
+          <div className="col-12 col-md-4">
             <div className="bg-white rounded-4 p-4 border border-slate-200 shadow-sm h-100 transition-all hover-elevate">
               <div className="d-flex align-items-center justify-content-between mb-3">
                 <span className="extra-small fw-bold text-uppercase tracking-wider text-info" style={{ color: '#0284C7' }}>Active Digital Cards</span>
@@ -304,27 +302,12 @@ const AdminDashboardPage = () => {
               </div>
               <h2 className="fw-extrabold text-dark mb-1 fs-2">{(metrics?.activeCards ?? metrics?.totalCards ?? 14).toLocaleString()}</h2>
               <div className="extra-small text-info fw-bold d-flex align-items-center gap-1">
-                <i className="bi bi-nfc me-0.5"></i> NFC & QR Live Engine
+                <i className="bi bi-nfc me-0.5"></i> NFC &amp; QR Engine Active
               </div>
             </div>
           </div>
 
-          <div className="col-12 col-sm-6 col-xl-3">
-            <div className="bg-white rounded-4 p-4 border border-slate-200 shadow-sm h-100 transition-all hover-elevate">
-              <div className="d-flex align-items-center justify-content-between mb-3">
-                <span className="extra-small fw-bold text-uppercase tracking-wider text-success" style={{ color: '#059669' }}>Total Scans & Telemetry</span>
-                <div className="p-3 rounded-4 text-white shadow-xs" style={{ background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)' }}>
-                  <i className="bi bi-qr-code-scan fs-5"></i>
-                </div>
-              </div>
-              <h2 className="fw-extrabold text-dark mb-1 fs-2">{(metrics?.totalScans ?? metrics?.totalAnalyticsEvents ?? 142).toLocaleString()}</h2>
-              <div className="extra-small text-success fw-bold d-flex align-items-center gap-1">
-                <i className="bi bi-lightning-charge-fill"></i> Real-time Analytics Stream
-              </div>
-            </div>
-          </div>
-
-          <div className="col-12 col-sm-6 col-xl-3">
+          <div className="col-12 col-md-4">
             <div className="bg-white rounded-4 p-4 border border-slate-200 shadow-sm h-100 transition-all hover-elevate">
               <div className="d-flex align-items-center justify-content-between mb-3">
                 <span className="extra-small fw-bold text-uppercase tracking-wider text-warning" style={{ color: '#D97706' }}>Gateway Health</span>
@@ -537,12 +520,6 @@ const AdminDashboardPage = () => {
                               <i className="bi bi-eye me-1"></i> Inspect
                             </button>
                             <button
-                              onClick={() => handleToggleUser(u)}
-                              className={`btn btn-sm ${isActive ? 'btn-outline-warning' : 'btn-outline-success'} rounded-pill px-3 extra-small fw-bold`}
-                            >
-                              {isActive ? 'Suspend' : 'Activate'}
-                            </button>
-                            <button
                               onClick={() => setDeleteTargetUser(u)}
                               className="btn btn-sm btn-outline-danger rounded-pill px-2.5 extra-small"
                               title="Delete user"
@@ -695,17 +672,87 @@ const AdminDashboardPage = () => {
                         <span className="fw-semibold text-dark">{inspectingUser.email}</span>
                       </div>
                     </div>
+                    <div className="col-12 mt-3">
+                      {inspectingUser.username && inspectingUser.isPublic !== false && inspectingUser.public !== false ? (
+                        <div className="p-3.5 rounded-4 border border-slate-200" style={{ background: '#FAF8FF' }}>
+                          <div className="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                            <div>
+                              <div className="d-flex align-items-center gap-2 mb-1">
+                                <span className="badge bg-success-subtle text-success border border-success-subtle rounded-pill extra-small fw-bold px-2 py-0.5">
+                                  PUBLIC PROFILE ACTIVE
+                                </span>
+                              </div>
+                              <span className="text-purple extra-small fw-bold">
+                                {window.location.origin}/{inspectingUser.username}
+                              </span>
+                            </div>
+                            <a
+                              href={`/${inspectingUser.username}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="btn btn-sm text-white rounded-pill px-3.5 py-2 extra-small fw-extrabold border-0 shadow-xs"
+                              style={{ background: '#7C3AED' }}
+                            >
+                              <i className="bi bi-box-arrow-up-right me-1.5"></i> Open Public Profile (/{inspectingUser.username})
+                            </a>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="p-3.5 rounded-4 border border-slate-200 bg-light text-dark">
+                          <div className="d-flex align-items-center gap-2 mb-1">
+                            <i className="bi bi-eye-slash-fill text-secondary fs-6"></i>
+                            <h6 className="fw-bold mb-0 small">No Public Profile Available</h6>
+                          </div>
+                          <p className="extra-small text-secondary mb-0">
+                            {inspectingUser.username
+                              ? 'This user has disabled public profile visibility.'
+                              : 'This user has not claimed a public profile username.'}
+                          </p>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 )}
 
                 {inspectorTab === 'cards' && (
                   <div className="text-center py-4 text-muted extra-small">
-                    User card details synchronized via digital business card service.
+                    {inspectingUser.username && inspectingUser.isPublic !== false && inspectingUser.public !== false ? (
+                      <>
+                        <p className="mb-3">View published digital business cards &amp; social links for <strong>@{inspectingUser.username}</strong>.</p>
+                        <a
+                          href={`/${inspectingUser.username}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="btn btn-sm text-white rounded-pill px-4 py-2 extra-small fw-bold border-0 shadow-xs"
+                          style={{ background: '#7C3AED' }}
+                        >
+                          <i className="bi bi-credit-card-2-front me-1.5"></i> View User Public Cards &rarr;
+                        </a>
+                      </>
+                    ) : (
+                      <p className="text-secondary fw-bold mb-0">
+                        <i className="bi bi-shield-lock me-1"></i> Public profile link not available for this account.
+                      </p>
+                    )}
                   </div>
                 )}
               </div>
 
-              <div className="modal-footer border-top p-3">
+              <div className="modal-footer border-top p-3 d-flex align-items-center justify-content-between">
+                {inspectingUser.username && inspectingUser.isPublic !== false && inspectingUser.public !== false ? (
+                  <a
+                    href={`/${inspectingUser.username}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn btn-sm btn-outline-purple rounded-pill px-3 extra-small fw-bold text-purple"
+                  >
+                    <i className="bi bi-box-arrow-up-right me-1"></i> Visit /{inspectingUser.username}
+                  </a>
+                ) : (
+                  <span className="badge bg-secondary-subtle text-secondary rounded-pill extra-small px-3 py-1.5 fw-bold">
+                    <i className="bi bi-eye-slash me-1"></i> Public Profile Unavailable
+                  </span>
+                )}
                 <button type="button" className="btn btn-secondary rounded-pill px-4 extra-small fw-bold" onClick={() => setInspectingUser(null)}>
                   Close Inspector
                 </button>

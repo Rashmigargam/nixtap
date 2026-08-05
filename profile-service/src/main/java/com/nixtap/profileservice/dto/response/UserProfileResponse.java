@@ -31,7 +31,8 @@ public class UserProfileResponse {
     private String profileImage;
     private String coverImage;
     @com.fasterxml.jackson.annotation.JsonProperty("isPublic")
-    private boolean isPublic;
+    @Builder.Default
+    private boolean isPublic = true;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

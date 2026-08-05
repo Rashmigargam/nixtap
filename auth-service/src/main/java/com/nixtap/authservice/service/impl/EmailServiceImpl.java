@@ -28,18 +28,19 @@ public class EmailServiceImpl implements EmailService {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setFrom(fromEmail);
             message.setTo(toEmail);
-            message.setSubject("Verify your Nixtap account");
+            message.setSubject("Your Nixtap Account Verification OTP Code");
             message.setText(
                     "Hello,\n\n" +
-                            "Please verify your email address by clicking the link below:\n\n" +
-                            baseUrl + "/api/v1/auth/verify-email?token=" + verificationCode + "\n\n" +
-                            "This link will remain active until you verify your account.\n\n" +
+                            "Thank you for registering with Nixtap!\n\n" +
+                            "Your 6-digit account verification OTP code is:\n\n" +
+                            "    >>> " + verificationCode + " <<<\n\n" +
+                            "Enter this OTP code on the registration page to activate your account.\n\n" +
                             "If you did not create a Nixtap account, please ignore this email.\n\n" +
                             "— The Nixtap Team");
             mailSender.send(message);
             log.info("Verification email sent to {}", toEmail);
         } catch (MailException e) {
-            log.error("Failed to send verification email to {}: {}", toEmail, e.getMessage());
+            log.error("Failed to send verification email to {}: {}", toEmail, e.getMessage(), e);
             // Do not rethrow — email failure should not block registration
         }
     }

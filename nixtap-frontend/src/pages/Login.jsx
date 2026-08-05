@@ -26,7 +26,7 @@ const Login = () => {
     setError('');
 
     if (!formData.email || !formData.password) {
-      setError('Please enter both email and password.');
+      setError('Please provide both email address and password.');
       return;
     }
 
@@ -50,158 +50,175 @@ const Login = () => {
   };
 
   return (
-    <div className="min-vh-100 d-flex align-items-center justify-content-center py-5 position-relative" style={{ background: 'linear-gradient(180deg, #FAF8FF 0%, #FFFFFF 100%)', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-      <div className="container position-relative" style={{ zIndex: 1 }}>
+    <div className="min-vh-100 d-flex flex-column justify-content-between py-4 bg-white text-dark" 
+      style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+
+      {/* Header Brand */}
+      <div className="container">
+        <div className="d-flex align-items-center justify-content-between py-2">
+          <Link className="d-inline-flex align-items-center fw-extrabold fs-4 text-decoration-none text-dark gap-2" to="/">
+            <div className="rounded-3 p-2 bg-purple text-white d-flex align-items-center justify-content-center shadow-sm" 
+              style={{ width: '38px', height: '38px', background: '#7C3AED' }}>
+              <i className="bi bi-flower1 fs-5"></i>
+            </div>
+            <span className="fw-extrabold tracking-tight text-dark" style={{ fontFamily: "'Outfit', sans-serif" }}>
+              Nixtap<span style={{ color: '#7C3AED' }}>.</span>
+            </span>
+          </Link>
+
+          <Link to="/register" className="btn btn-sm btn-outline-dark rounded-pill px-3.5 py-1.5 fw-bold">
+            Create Account
+          </Link>
+        </div>
+      </div>
+
+      {/* Main Content Form */}
+      <div className="container my-auto py-4">
         <div className="row align-items-center g-5 justify-content-center">
+          
+          {/* Left Column Playful Showcase */}
           <div className="col-12 col-lg-6 col-xl-5 d-none d-lg-block">
             <div className="pe-xl-4">
-              <Link className="d-flex align-items-center fw-extrabold text-dark fs-3 mb-4 text-decoration-none" to="/">
-                <span className="p-2 radius-sm bg-pastel-purple text-white me-2 d-inline-flex align-items-center justify-content-center" style={{ width: '36px', height: '36px' }}>
-                  <i className="bi bi-layers-half fs-5"></i>
-                </span>
-                <span className="fw-bold tracking-tight">Nixtap.</span>
-              </Link>
+              
+              <div className="d-inline-flex align-items-center gap-2 px-3 py-1.5 rounded-pill bg-pastel-lavender text-purple fw-bold small mb-4">
+                <i className="bi bi-[#7C3AED] bi-stars"></i>
+                <span>Welcome back to Nixtap</span>
+              </div>
 
-              <h1 className="fw-extrabold text-dark display-4 mb-3 lh-tight" style={{ letterSpacing: '-0.02em' }}>
-                Welcome Back to <span className="text-purple accent-underline">Your Hub</span>
+              <h1 className="display-4 fw-extrabold text-dark mb-3 tracking-tight" style={{ fontFamily: "'Outfit', sans-serif", lineHeight: 1.15 }}>
+                Sign in to your <br />
+                <span className="position-relative d-inline-block px-3 py-1 me-2 rounded-4 text-purple mt-1" 
+                  style={{ background: 'rgba(124, 58, 237, 0.12)', color: '#7C3AED', transform: 'rotate(-1.5deg)' }}>
+                  digital card hub
+                </span>
               </h1>
-              <p className="text-secondary fs-5 mb-4" style={{ color: '#475569' }}>
-                Sign in to manage your digital cards, track shares, view real-time analytics, and schedule meetings seamlessly.
+
+              <p className="text-secondary fs-6 mb-4 leading-relaxed">
+                Manage your NFC tags, digital business cards, view live scan telemetry, and receive booking requests directly from your custom handles.
               </p>
 
+              {/* Badges */}
               <div className="d-flex flex-wrap gap-2 mb-4">
-                <span className="floating-tag bg-pastel-lavender text-purple">
-                  <i className="bi bi-hand-index-thumb"></i> #NFCReady
+                <span className="badge rounded-pill px-3 py-2 fw-bold text-purple" style={{ background: '#EDE9FE' }}>
+                  <i className="bi bi-nfc me-1"></i> #NFCReady
                 </span>
-                <span className="floating-tag bg-pastel-soft-yellow text-dark">
-                  <i className="bi bi-qr-code"></i> #InstantScan
+                <span className="badge rounded-pill px-3 py-2 fw-bold" style={{ background: '#FEF08A', color: '#854D0E' }}>
+                  <i className="bi bi-qr-code me-1"></i> #InstantScan
                 </span>
-                <span className="floating-tag bg-pastel-cyan text-info">
-                  <i className="bi bi-graph-up-arrow"></i> #RealtimeStats
+                <span className="badge rounded-pill px-3 py-2 fw-bold" style={{ background: '#FCE7F3', color: '#9D174D' }}>
+                  <i className="bi bi-graph-up-arrow me-1"></i> #LiveStats
                 </span>
               </div>
 
-              <div className="p-4 bg-white rounded-4 border border-slate-200 shadow-sm">
-                <div className="d-flex gap-3 align-items-center mb-2">
-                  <div className="rounded-circle bg-pastel-purple text-white fw-bold d-flex align-items-center justify-content-center" style={{ width: '42px', height: '42px' }}>
-                    JD
-                  </div>
+              {/* Clean Testimonial Card */}
+              <div className="p-4 rounded-5 border border-slate-200 bg-light shadow-sm">
+                <div className="d-flex gap-3 align-items-center mb-3">
+                  <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=120&q=80" 
+                    alt="Kristin Watson" className="rounded-circle border" style={{ width: '48px', height: '48px', objectFit: 'cover' }} />
                   <div>
-                    <div className="fw-bold text-dark small">John Doe</div>
-                    <div className="extra-small text-muted">Senior Product Manager</div>
+                    <div className="fw-extrabold text-dark small">Kristin Watson</div>
+                    <div className="extra-small text-muted">Senior Product Designer</div>
                   </div>
                 </div>
-                <p className="text-secondary extra-small mb-0 fst-italic">
-                  "Nixtap turned every conference handshake into a tracked, actionable connection."
+                <p className="text-secondary extra-small mb-0 fst-italic leading-relaxed">
+                  "Nixtap replaced my paper cards completely! One tap at events and people are immediately blown away by my clean profile."
                 </p>
               </div>
+
             </div>
           </div>
 
+          {/* Right Column Form Card */}
           <div className="col-12 col-lg-6 col-xl-5">
-            <div className="bg-white rounded-4 border border-slate-200 shadow-xl overflow-hidden p-4 p-sm-5">
-              <div className="text-center mb-4">
-                <Link className="d-lg-none d-flex align-items-center justify-content-center fw-extrabold fs-3 mb-3 text-decoration-none text-dark" to="/">
-                  <span className="p-2 radius-sm bg-pastel-purple text-white me-2 d-inline-flex align-items-center justify-content-center" style={{ width: '32px', height: '32px' }}>
-                    <i className="bi bi-layers-half"></i>
-                  </span>
-                  <span>Nixtap.</span>
-                </Link>
-                <h3 className="fw-extrabold text-dark mb-1">Sign In</h3>
-                <p className="mb-0 text-secondary small">Access your Nixtap Microservice dashboard</p>
+            <div className="border border-slate-200 rounded-5 shadow-sm p-4 p-sm-5 bg-white position-relative">
+              
+              <div className="mb-4">
+                <h2 className="fw-extrabold text-dark mb-1" style={{ fontFamily: "'Outfit', sans-serif" }}>Sign In</h2>
+                <p className="text-secondary small">Enter your account credentials to continue</p>
               </div>
 
               {error && (
-                <div className="alert alert-danger alert-dismissible fade show d-flex align-items-center mb-4 small rounded-3" role="alert">
-                  <i className="bi bi-exclamation-triangle-fill me-2 fs-6"></i>
+                <div className="alert alert-danger rounded-4 border-0 small py-3 px-3.5 mb-4 d-flex align-items-center gap-2">
+                  <i className="bi bi-exclamation-triangle-fill fs-6 flex-shrink-0"></i>
                   <div>{error}</div>
-                  <button
-                    type="button"
-                    className="btn-close"
-                    onClick={() => setError('')}
-                    aria-label="Close"
-                  ></button>
                 </div>
               )}
 
-              <form onSubmit={handleSubmit} noValidate>
-                <div className="mb-3">
-                  <label htmlFor="email" className="form-label small fw-bold text-dark">
-                    Email Address
-                  </label>
+              <form onSubmit={handleSubmit}>
+                <div className="mb-3.5">
+                  <label className="form-label text-dark fw-bold extra-small mb-1.5">Email Address</label>
                   <div className="input-group">
-                    <span className="input-group-text bg-light border-end-0">
-                      <i className="bi bi-envelope text-muted"></i>
+                    <span className="input-group-text bg-light border-slate-200 text-muted rounded-start-4 border-end-0 px-3">
+                      <i className="bi bi-envelope"></i>
                     </span>
                     <input
                       type="email"
-                      id="email"
                       name="email"
-                      className="form-control border-start-0"
+                      className="form-control bg-light border-slate-200 text-dark rounded-end-4 py-2.5 px-3 text-sm focus-ring-purple"
                       placeholder="name@example.com"
                       value={formData.email}
                       onChange={handleChange}
                       required
-                      disabled={loading}
                     />
                   </div>
                 </div>
 
                 <div className="mb-4">
-                  <label htmlFor="password" className="form-label small fw-bold text-dark">
-                    Password
-                  </label>
+                  <div className="d-flex align-items-center justify-content-between mb-1.5">
+                    <label className="form-label text-dark fw-bold extra-small mb-0">Password</label>
+                  </div>
                   <div className="input-group">
-                    <span className="input-group-text bg-light border-end-0">
-                      <i className="bi bi-lock text-muted"></i>
+                    <span className="input-group-text bg-light border-slate-200 text-muted rounded-start-4 border-end-0 px-3">
+                      <i className="bi bi-lock"></i>
                     </span>
                     <input
                       type="password"
-                      id="password"
                       name="password"
-                      className="form-control border-start-0"
-                      placeholder="Enter your password"
+                      className="form-control bg-light border-slate-200 text-dark rounded-end-4 py-2.5 px-3 text-sm focus-ring-purple"
+                      placeholder="••••••••"
                       value={formData.password}
                       onChange={handleChange}
                       required
-                      disabled={loading}
                     />
                   </div>
                 </div>
 
-                <div className="d-grid mt-4">
-                  <button
-                    type="submit"
-                    className="btn bg-pastel-purple text-white fw-bold py-3 rounded-pill shadow-sm d-flex align-items-center justify-content-center gap-2"
-                    style={{ background: '#7C3AED' }}
-                    disabled={loading}
-                  >
-                    {loading ? (
-                      <>
-                        <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                        <span>Authenticating...</span>
-                      </>
-                    ) : (
-                      <>
-                        <span>Sign In</span>
-                        <i className="bi bi-arrow-right"></i>
-                      </>
-                    )}
-                  </button>
-                </div>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="btn text-white w-100 py-3 fw-bold rounded-pill shadow-sm border-0 d-flex align-items-center justify-content-center gap-2 transition-all"
+                  style={{ background: '#7C3AED' }}
+                >
+                  {loading ? (
+                    <>
+                      <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                      <span>Signing in...</span>
+                    </>
+                  ) : (
+                    <>
+                      <span>Sign In to Account</span>
+                      <i className="bi bi-arrow-right-short fs-5"></i>
+                    </>
+                  )}
+                </button>
               </form>
 
-              <div className="text-center pt-4 border-top mt-4">
-                <p className="mb-0 text-muted small">
-                  Don't have an account?{' '}
-                  <Link to="/register" className="text-purple fw-bold text-decoration-none">
-                    Register now
-                  </Link>
-                </p>
+              <div className="mt-4 pt-3 border-top border-slate-100 text-center">
+                <span className="text-secondary extra-small">Don't have an account? </span>
+                <Link to="/register" className="fw-bold text-purple text-decoration-none extra-small ms-1" style={{ color: '#7C3AED' }}>
+                  Register here
+                </Link>
               </div>
+
             </div>
           </div>
+
         </div>
+      </div>
+
+      {/* Footer */}
+      <div className="container py-2 text-center text-muted extra-small">
+        © 2026 Nixtap Inc. All rights reserved.
       </div>
     </div>
   );

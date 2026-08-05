@@ -68,6 +68,13 @@ public class BusinessCardController {
         return ResponseEntity.ok(ApiResponse.success("User cards retrieved successfully", response));
     }
 
+    @GetMapping("/public/user/{userId}")
+    @Operation(summary = "Public endpoint to get all Business Cards owned by a User")
+    public ResponseEntity<ApiResponse<List<BusinessCardResponse>>> getPublicCardsByUserId(@PathVariable Long userId) {
+        List<BusinessCardResponse> response = cardService.getCardsByUserId(userId);
+        return ResponseEntity.ok(ApiResponse.success("Public user cards retrieved successfully", response));
+    }
+
     @GetMapping("/user/{userId}/page")
     @Operation(summary = "Get paginated Business Cards owned by a User")
     public ResponseEntity<ApiResponse<Page<BusinessCardResponse>>> getCardsByUserIdPaginated(

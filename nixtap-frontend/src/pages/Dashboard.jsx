@@ -203,41 +203,40 @@ const Dashboard = () => {
       )}
 
       {/* ── HERO BANNER ───────────────────────────────────────────────────── */}
-      <div className="py-4 mb-n3 text-white position-relative overflow-hidden"
-        style={{ background: 'linear-gradient(135deg, #0F172A 0%, #1E1B4B 55%, #312e81 100%)' }}>
+      <div className="py-4 border-bottom border-slate-200 bg-white position-relative">
         <div className="container-fluid px-lg-5">
           <div className="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
             <div>
-              <div className="d-flex align-items-center gap-2 mb-1 flex-wrap">
-                <span className="badge bg-white bg-opacity-10 text-light rounded-pill extra-small px-2.5 py-1">
-                  <i className="bi bi-circle-fill text-success me-1" style={{ fontSize: '7px' }}></i>
+              <div className="d-flex align-items-center gap-2 mb-2 flex-wrap">
+                <span className="badge rounded-pill extra-small px-3 py-1.5 fw-bold text-purple" style={{ background: '#EDE9FE' }}>
+                  <i className="bi bi-circle-fill text-success me-1.5" style={{ fontSize: '7px' }}></i>
                   {new Date().toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' })}
                 </span>
                 {pendingMeetings.length > 0 && (
-                  <span className="badge bg-warning text-dark rounded-pill extra-small px-2.5 py-1 fw-bold">
+                  <span className="badge rounded-pill extra-small px-3 py-1.5 fw-bold" style={{ background: '#FEF08A', color: '#854D0E' }}>
                     <i className="bi bi-calendar-check me-1"></i>{pendingMeetings.length} Pending Meeting{pendingMeetings.length > 1 ? 's' : ''}
                   </span>
                 )}
                 {unreadCount > 0 && (
-                  <span className="badge bg-danger text-white rounded-pill extra-small px-2.5 py-1 fw-bold">
+                  <span className="badge rounded-pill extra-small px-3 py-1.5 fw-bold text-pink" style={{ background: '#FCE7F3', color: '#9D174D' }}>
                     <i className="bi bi-bell-fill me-1"></i>{unreadCount} Unread
                   </span>
                 )}
               </div>
-              <h1 className="fw-extrabold fs-3 text-white mb-1" style={{ letterSpacing: '-0.025em' }}>
-                Welcome back, {displayName} 👋
+              <h1 className="fw-extrabold fs-3 text-dark mb-1" style={{ fontFamily: "'Outfit', sans-serif", letterSpacing: '-0.025em' }}>
+                Welcome back, <span style={{ color: '#7C3AED' }}>{displayName}</span> 👋
               </h1>
-              <p className="text-slate-300 small mb-0">{displayEmail}</p>
+              <p className="text-secondary small mb-0">{displayEmail}</p>
             </div>
             <div className="d-flex align-items-center gap-2">
               <button onClick={fetchAll} disabled={refreshing}
-                className="btn btn-outline-light rounded-pill px-3 py-2 small fw-semibold d-inline-flex align-items-center gap-2">
+                className="btn btn-outline-dark rounded-pill px-3.5 py-2 small fw-bold d-inline-flex align-items-center gap-2">
                 <i className={`bi bi-arrow-clockwise ${refreshing ? 'spin-anim' : ''}`}></i>
                 {refreshing ? 'Syncing...' : 'Refresh'}
               </button>
               <Link to="/cards"
-                className="btn text-white fw-bold rounded-pill px-4 py-2 small shadow-sm d-inline-flex align-items-center gap-2"
-                style={{ background: 'linear-gradient(135deg, #7C3AED, #6366F1)' }}>
+                className="btn text-white fw-bold rounded-pill px-4 py-2 small shadow-sm d-inline-flex align-items-center gap-2 border-0"
+                style={{ background: '#7C3AED' }}>
                 <i className="bi bi-plus-lg"></i> New Card
               </Link>
             </div>
@@ -729,68 +728,6 @@ const Dashboard = () => {
               <Link to="/profile" className="btn btn-sm w-100 mt-3 rounded-pill fw-bold extra-small"
                 style={{ background: '#F3E8FF', color: '#7C3AED' }}>
                 <i className="bi bi-pencil-fill me-1"></i>Edit Profile
-              </Link>
-            </div>
-
-            {/* Platform Stats */}
-            <div className="bg-white rounded-4 border border-slate-200 shadow-xs p-4 mb-4">
-              <h6 className="fw-extrabold text-dark mb-3 small">Platform Stats</h6>
-              {[
-                { label: 'Digital Cards',    value: cards.length,        icon: 'bi-credit-card-fill',    color: '#7C3AED' },
-                { label: 'Active Cards',     value: activeCards.length,  icon: 'bi-check-circle-fill',   color: '#059669' },
-                { label: 'Portfolio Items',  value: portfolios.length,   icon: 'bi-journal-code',        color: '#4338CA' },
-                { label: 'QR Codes',         value: qrCodes.length,      icon: 'bi-qr-code-scan',        color: '#0284C7' },
-                { label: 'Profile Views',    value: totalViews.toLocaleString(), icon: 'bi-eye-fill',   color: '#7C3AED' },
-                { label: 'Total Scans',      value: totalScans.toLocaleString(), icon: 'bi-graph-up',   color: '#10B981' },
-                { label: 'Meetings',         value: meetings.length,     icon: 'bi-calendar-check-fill', color: '#F59E0B' },
-                { label: 'Feedback Reviews', value: feedback.length,     icon: 'bi-star-fill',           color: '#EC4899' },
-              ].map((item, i) => (
-                <div key={i} className="d-flex align-items-center justify-content-between py-1.5 border-bottom last-no-border">
-                  <div className="d-flex align-items-center gap-2 extra-small text-muted">
-                    <i className={`bi ${item.icon}`} style={{ color: item.color }}></i>
-                    {item.label}
-                  </div>
-                  <span className="fw-extrabold text-dark small">{item.value}</span>
-                </div>
-              ))}
-            </div>
-
-            {/* Microservice Health */}
-            <div className="bg-white rounded-4 border border-slate-200 shadow-xs p-4 mb-4">
-              <h6 className="fw-extrabold text-dark mb-3 small">
-                <i className="bi bi-cloud-check-fill text-success me-2"></i>API Service Health
-              </h6>
-              {[
-                { name: 'Profile Service',       ok: svcStatus.profile },
-                { name: 'Business Card Service', ok: svcStatus.cards },
-                { name: 'Analytics Service',     ok: svcStatus.analytics },
-                { name: 'QR Code Service',       ok: svcStatus.qr },
-                { name: 'Portfolio Service',     ok: svcStatus.portfolio },
-                { name: 'Meeting Service',       ok: svcStatus.meetings },
-                { name: 'Feedback Service',      ok: svcStatus.feedback },
-                { name: 'Notification Service',  ok: svcStatus.notifications },
-              ].map((s, i) => (
-                <div key={i} className="d-flex align-items-center justify-content-between py-1.5 border-bottom last-no-border">
-                  <span className="extra-small text-muted">{s.name}</span>
-                  <span className={`badge rounded-pill extra-small fw-bold ${s.ok ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger'}`}>
-                    {s.ok ? '● Online' : '● Error'}
-                  </span>
-                </div>
-              ))}
-            </div>
-
-            {/* Upgrade CTA */}
-            <div className="rounded-4 p-4 text-white shadow-sm"
-              style={{ background: 'linear-gradient(135deg, #0F172A, #1E1B4B)' }}>
-              <span className="badge bg-white text-dark rounded-pill fw-bold extra-small px-3 py-1 mb-2">Nixtap Pro</span>
-              <h6 className="fw-extrabold text-white mt-2 mb-1">Unlock Full Platform</h6>
-              <p className="extra-small text-slate-300 mb-3">Unlimited cards, custom NFC branding, priority support &amp; advanced analytics.</p>
-              <div className="progress mb-2" style={{ height: '4px', background: 'rgba(255,255,255,0.15)' }}>
-                <div className="progress-bar" style={{ width: '65%', background: '#7C3AED' }}></div>
-              </div>
-              <p className="extra-small text-slate-400 mb-3">Trial ends in 12 days</p>
-              <Link to="/profile" className="btn bg-white text-dark fw-bold w-100 rounded-pill py-2 small d-flex align-items-center justify-content-center gap-2">
-                <i className="bi bi-stars text-warning"></i> See Plans
               </Link>
             </div>
           </div>

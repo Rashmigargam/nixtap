@@ -7,21 +7,26 @@ const PublicNavbar = () => {
 
   const isAdmin =
     user?.role === 'ROLE_ADMIN' ||
-    (Array.isArray(user?.roles) && user.roles.includes('ROLE_ADMIN'));
+    user?.role === 'ADMIN' ||
+    (Array.isArray(user?.roles) && user.roles.some((r) => String(r).toUpperCase().includes('ADMIN')));
 
   return (
-    <nav className="navbar navbar-expand-lg sticky-top py-3" style={{ background: 'rgba(255, 255, 255, 0.85)', backdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(241, 245, 249, 0.8)' }}>
+    <nav className="navbar navbar-expand-lg sticky-top py-3 border-bottom border-slate-100 bg-white" 
+      style={{ backdropFilter: 'blur(20px)', zIndex: 1000 }}>
       <div className="container">
+        {/* Brand / Logo */}
         <Link className="navbar-brand d-flex align-items-center fw-extrabold fs-4 me-4 text-dark" to="/">
-          <span className="p-2 radius-sm bg-pastel-purple text-white me-2 d-inline-flex align-items-center justify-content-center" style={{ width: '36px', height: '36px' }}>
-            <i className="bi bi-layers-half fs-5"></i>
+          <div className="rounded-3 p-2 bg-purple me-2 shadow-sm d-flex align-items-center justify-content-center text-white" 
+            style={{ width: '38px', height: '38px', background: '#7C3AED' }}>
+            <i className="bi bi-flower1 fs-5"></i>
+          </div>
+          <span className="fw-extrabold tracking-tight text-dark" style={{ fontFamily: "'Outfit', 'Plus Jakarta Sans', sans-serif" }}>
+            Nixtap<span style={{ color: '#7C3AED' }}>.</span>
           </span>
-          <span className="fw-bold tracking-tight" style={{ color: '#0f172a' }}>Nixtap</span>
-          <span className="ms-1 badge bg-pastel-lavender text-primary rounded-pill small fw-bold" style={{ fontSize: '0.65rem' }}>PRO</span>
         </Link>
 
         <button
-          className="navbar-toggler border-0 shadow-none"
+          className="navbar-toggler border-0 text-dark shadow-none"
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#publicNavbar"
@@ -29,18 +34,19 @@ const PublicNavbar = () => {
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
-          <span className="navbar-toggler-icon"></span>
+          <i className="bi bi-list fs-2 text-dark"></i>
         </button>
 
         <div className="collapse navbar-collapse" id="publicNavbar">
-          <ul className="navbar-nav mx-auto mb-2 mb-lg-0 gap-1 bg-light px-3 py-1.5 rounded-pill border border-slate-200">
+          {/* Centered Pill Nav */}
+          <ul className="navbar-nav mx-auto mb-2 mb-lg-0 gap-1 px-3 py-1.5 rounded-pill border border-slate-200 bg-light">
             <li className="nav-item">
               <NavLink
                 to="/"
                 end
                 className={({ isActive }) =>
-                  `nav-link px-3 py-1.5 rounded-pill fw-semibold small ${
-                    isActive ? 'bg-white text-primary shadow-sm' : 'text-secondary'
+                  `nav-link px-3.5 py-1.5 rounded-pill fw-bold small transition-all ${
+                    isActive ? 'bg-dark text-white shadow-sm' : 'text-slate-600 hover-text-dark'
                   }`
                 }
               >
@@ -50,7 +56,7 @@ const PublicNavbar = () => {
             <li className="nav-item">
               <a
                 href="#features"
-                className="nav-link px-3 py-1.5 rounded-pill fw-semibold small text-secondary"
+                className="nav-link px-3.5 py-1.5 rounded-pill fw-bold small text-slate-600 hover-text-dark"
               >
                 Features
               </a>
@@ -58,7 +64,7 @@ const PublicNavbar = () => {
             <li className="nav-item">
               <a
                 href="#how"
-                className="nav-link px-3 py-1.5 rounded-pill fw-semibold small text-secondary"
+                className="nav-link px-3.5 py-1.5 rounded-pill fw-bold small text-slate-600 hover-text-dark"
               >
                 How It Works
               </a>
@@ -66,50 +72,43 @@ const PublicNavbar = () => {
             <li className="nav-item">
               <a
                 href="#testimonials"
-                className="nav-link px-3 py-1.5 rounded-pill fw-semibold small text-secondary"
+                className="nav-link px-3.5 py-1.5 rounded-pill fw-bold small text-slate-600 hover-text-dark"
               >
                 Reviews
               </a>
             </li>
           </ul>
 
-          <div className="d-flex align-items-center gap-2">
+          {/* Right Action Buttons */}
+          <div className="d-flex align-items-center gap-3">
             {isAuthenticated ? (
               <>
                 <Link
-                  to="/dashboard"
-                  className="btn btn-pill bg-dark text-white fw-bold px-4 py-2 small d-flex align-items-center gap-2 shadow-sm"
+                  to={isAdmin ? "/admin" : "/dashboard"}
+                  className="btn text-white fw-bold px-4 py-2.5 small d-flex align-items-center gap-2 rounded-pill border-0 shadow-sm transition-all"
+                  style={{ background: '#7C3AED' }}
                 >
-                  <span>Dashboard</span>
-                  <span className="bg-white text-dark rounded-circle d-inline-flex align-items-center justify-content-center" style={{ width: '22px', height: '22px', fontSize: '0.75rem' }}>
-                    <i className="bi bi-arrow-up-right"></i>
-                  </span>
+                  <span>{isAdmin ? "Admin Portal" : "Dashboard"}</span>
+                  <i className="bi bi-arrow-up-right-circle-fill fs-6"></i>
                 </Link>
-                {isAdmin && (
-                  <Link
-                    to="/admin"
-                    className="btn btn-pill bg-pastel-purple text-white fw-bold px-3 py-2 small"
-                  >
-                    <i className="bi bi-shield-lock-fill me-1"></i> Admin
-                  </Link>
-                )}
               </>
             ) : (
               <>
                 <Link
                   to="/login"
-                  className="btn btn-pill bg-white text-dark fw-bold px-3.5 py-2 small border border-slate-200"
+                  className="fw-bold text-slate-700 hover-text-dark text-decoration-none small px-2"
                 >
                   Sign In
                 </Link>
                 <Link
                   to="/register"
-                  className="btn btn-pill bg-pastel-purple text-white fw-bold px-4 py-2 small d-flex align-items-center gap-2 shadow-md"
+                  className="btn text-white fw-bold px-4 py-2.5 small d-flex align-items-center gap-2 rounded-pill border-0 shadow-sm transition-all"
+                  style={{ background: '#7C3AED' }}
                 >
-                  <span>Get started</span>
-                  <span className="bg-white text-purple rounded-circle d-inline-flex align-items-center justify-content-center" style={{ width: '22px', height: '22px', fontSize: '0.75rem', color: '#7c3aed' }}>
-                    <i className="bi bi-arrow-up-right"></i>
-                  </span>
+                  <span>Get Started</span>
+                  <div className="rounded-circle bg-white bg-opacity-20 p-1 d-flex align-items-center justify-content-center" style={{ width: '20px', height: '20px' }}>
+                    <i className="bi bi-arrow-up-right fs-6 text-white"></i>
+                  </div>
                 </Link>
               </>
             )}

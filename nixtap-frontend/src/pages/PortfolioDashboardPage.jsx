@@ -222,20 +222,21 @@ const PortfolioDashboardPage = () => {
       )}
 
       {/* Hero Header */}
-      <div className="py-4 text-white position-relative overflow-hidden mb-4"
-        style={{ background: 'linear-gradient(135deg, #0F172A 0%, #1E1B4B 60%, #312e81 100%)' }}>
+      <div className="py-4 border-bottom border-slate-200 bg-white position-relative mb-4">
         <div className="container-fluid px-lg-5">
           <div className="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
             <div>
-              <span className="badge bg-white bg-opacity-10 text-light rounded-pill extra-small px-3 py-1 mb-2">
+              <span className="badge rounded-pill extra-small px-3 py-1.5 fw-bold text-purple mb-2" style={{ background: '#EDE9FE' }}>
                 Full Professional Portfolio
               </span>
-              <h1 className="fw-extrabold fs-3 text-white mb-1">Portfolio Control Studio</h1>
-              <p className="text-slate-300 small mb-0">Manage all 8 professional showcase sections stored in MySQL.</p>
+              <h1 className="fw-extrabold fs-3 text-dark mb-1" style={{ fontFamily: "'Outfit', sans-serif" }}>
+                Portfolio Control <span style={{ color: '#7C3AED' }}>Studio</span>
+              </h1>
+              <p className="text-secondary small mb-0">Manage all 8 professional showcase sections stored in MySQL.</p>
             </div>
             <button onClick={() => openAddModal(activeTab.slice(0, -1))}
-              className="btn text-white fw-bold rounded-pill px-4 py-2 small shadow-sm d-inline-flex align-items-center gap-2"
-              style={{ background: 'linear-gradient(135deg, #7C3AED, #6366F1)' }}>
+              className="btn text-white fw-bold rounded-pill px-4 py-2.5 small shadow-sm d-inline-flex align-items-center gap-2 border-0"
+              style={{ background: '#7C3AED' }}>
               <i className="bi bi-plus-lg"></i> Add New {activeTab.slice(0, -1)}
             </button>
           </div>

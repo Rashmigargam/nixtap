@@ -41,7 +41,13 @@ const MainLayout = () => {
 
           {/* Brand */}
           <NavLink className="navbar-brand d-flex align-items-center gap-2 me-4" to={isAdmin ? '/admin' : '/dashboard'}>
-            <span className="fw-extrabold fs-4 text-dark" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", letterSpacing: '-0.03em' }}>Nixtap.</span>
+            <div className="rounded-3 p-1.5 bg-purple text-white d-flex align-items-center justify-content-center shadow-sm" 
+              style={{ width: '34px', height: '34px', background: '#7C3AED' }}>
+              <i className="bi bi-flower1 fs-6"></i>
+            </div>
+            <span className="fw-extrabold fs-4 text-dark" style={{ fontFamily: "'Outfit', 'Plus Jakarta Sans', sans-serif", letterSpacing: '-0.03em' }}>
+              Nixtap<span style={{ color: '#7C3AED' }}>.</span>
+            </span>
             {isAdmin && (
               <span className="badge bg-danger-subtle text-danger rounded-pill extra-small fw-bold border border-danger-subtle d-inline-flex align-items-center gap-1">
                 <i className="bi bi-shield-lock-fill"></i> ADMIN
@@ -65,38 +71,14 @@ const MainLayout = () => {
 
             {/* ── ADMIN NAV LINKS ─────────────────────────────────────── */}
             {isAdmin ? (
-              <ul className="navbar-nav mx-auto mb-2 mb-lg-0 gap-1 align-items-lg-center">
-                <li className="nav-item">
-                  <NavLink to="/admin"
-                    className={({ isActive }) =>
-                      `nav-link px-3 py-1.5 rounded-pill fw-bold small ${isActive ? 'bg-dark text-white' : 'text-secondary'}`
-                    }>
-                    <i className="bi bi-shield-lock-fill me-1.5 text-warning"></i> Control Center
-                  </NavLink>
-                </li>
-                <li className="nav-item">
-                  <NavLink to="/analytics"
-                    className={({ isActive }) =>
-                      `nav-link px-3 py-1.5 rounded-pill fw-semibold small ${isActive ? 'bg-pastel-lavender text-purple' : 'text-secondary'}`
-                    }>
-                    <i className="bi bi-activity me-1.5"></i> Telemetry
-                  </NavLink>
-                </li>
-                <li className="nav-item">
-                  <NavLink to="/dashboard"
-                    className="nav-link px-3 py-1.5 rounded-pill fw-semibold small text-muted border border-slate-200"
-                    title="Switch to user portal">
-                    <i className="bi bi-person-workspace me-1.5 text-primary"></i> User View
-                  </NavLink>
-                </li>
-              </ul>
+              <div className="mx-auto"></div>
             ) : (
               /* ── USER NAV LINKS ─────────────────────────────────────── */
-              <ul className="navbar-nav mx-auto mb-2 mb-lg-0 gap-1 align-items-lg-center">
+              <ul className="navbar-nav mx-auto mb-2 mb-lg-0 gap-1 px-2 py-1 rounded-pill border border-slate-200 bg-light align-items-lg-center">
                 <li className="nav-item">
                   <NavLink to="/dashboard"
                     className={({ isActive }) =>
-                      `nav-link px-3 py-1.5 rounded-pill fw-semibold small ${isActive ? 'bg-pastel-lavender text-purple' : 'text-secondary'}`
+                      `nav-link px-3 py-1.5 rounded-pill fw-bold small transition-all ${isActive ? 'bg-dark text-white shadow-sm' : 'text-slate-600 hover-text-dark'}`
                     }>
                     <i className="bi bi-grid-fill me-1.5"></i> Dashboard
                   </NavLink>
@@ -104,23 +86,15 @@ const MainLayout = () => {
                 <li className="nav-item">
                   <NavLink to="/cards"
                     className={({ isActive }) =>
-                      `nav-link px-3 py-1.5 rounded-pill fw-semibold small ${isActive ? 'bg-pastel-lavender text-purple' : 'text-secondary'}`
+                      `nav-link px-3 py-1.5 rounded-pill fw-bold small transition-all ${isActive ? 'bg-dark text-white shadow-sm' : 'text-slate-600 hover-text-dark'}`
                     }>
                     <i className="bi bi-credit-card-fill me-1.5"></i> Cards
                   </NavLink>
                 </li>
                 <li className="nav-item">
-                  <NavLink to="/analytics"
-                    className={({ isActive }) =>
-                      `nav-link px-3 py-1.5 rounded-pill fw-semibold small ${isActive ? 'bg-pastel-lavender text-purple' : 'text-secondary'}`
-                    }>
-                    <i className="bi bi-graph-up-arrow me-1.5"></i> Analytics
-                  </NavLink>
-                </li>
-                <li className="nav-item">
                   <NavLink to="/portfolio"
                     className={({ isActive }) =>
-                      `nav-link px-3 py-1.5 rounded-pill fw-semibold small ${isActive ? 'bg-pastel-lavender text-purple' : 'text-secondary'}`
+                      `nav-link px-3 py-1.5 rounded-pill fw-bold small transition-all ${isActive ? 'bg-dark text-white shadow-sm' : 'text-slate-600 hover-text-dark'}`
                     }>
                     <i className="bi bi-journal-code me-1.5"></i> Portfolio
                   </NavLink>
@@ -128,7 +102,7 @@ const MainLayout = () => {
                 <li className="nav-item">
                   <NavLink to="/meetings"
                     className={({ isActive }) =>
-                      `nav-link px-3 py-1.5 rounded-pill fw-semibold small ${isActive ? 'bg-pastel-lavender text-purple' : 'text-secondary'}`
+                      `nav-link px-3 py-1.5 rounded-pill fw-bold small transition-all ${isActive ? 'bg-dark text-white shadow-sm' : 'text-slate-600 hover-text-dark'}`
                     }>
                     <i className="bi bi-calendar-check-fill me-1.5"></i> Meetings
                   </NavLink>
@@ -136,7 +110,7 @@ const MainLayout = () => {
                 <li className="nav-item">
                   <NavLink to="/feedback"
                     className={({ isActive }) =>
-                      `nav-link px-3 py-1.5 rounded-pill fw-semibold small ${isActive ? 'bg-pastel-lavender text-purple' : 'text-secondary'}`
+                      `nav-link px-3 py-1.5 rounded-pill fw-bold small transition-all ${isActive ? 'bg-dark text-white shadow-sm' : 'text-slate-600 hover-text-dark'}`
                     }>
                     <i className="bi bi-star-fill me-1.5"></i> Feedback
                   </NavLink>

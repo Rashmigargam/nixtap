@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import axios from 'axios';
 
 const Register = () => {
+  const [step, setStep] = useState(1); // 1: Register Form, 2: OTP Verification Form
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
     password: '',
   });
+  const [otpCode, setOtpCode] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
@@ -52,19 +55,9 @@ const Register = () => {
 
     try {
       setLoading(true);
-      const res = await register(formData.fullName.trim(), formData.email.trim(), formData.password);
-      setSuccess('Account registered successfully! Redirecting to your control panel...');
-      
-      const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
-      const role = res?.data?.role || res?.role || storedUser?.role || (formData.email.toLowerCase().includes('admin') ? 'ROLE_ADMIN' : 'ROLE_USER');
-
-      setTimeout(() => {
-        if (role === 'ROLE_ADMIN' || role === 'ADMIN' || formData.email.toLowerCase().includes('admin')) {
-          navigate('/admin');
-        } else {
-          navigate('/dashboard');
-        }
-      }, 1200);
+      await register(formData.fullName.trim(), formData.email.trim(), formData.password);
+      setSuccess(`An OTP verification code has been sent to ${formData.email}. Please check your inbox.`);
+      setStep(2); // Move to OTP Verification step
     } catch (err) {
       const serverMessage = err.message || err.response?.data?.message || 'Registration failed. Please try again.';
       setError(serverMessage);
@@ -73,190 +66,278 @@ const Register = () => {
     }
   };
 
+  const handleOtpVerify = async (e) => {
+    e.preventDefault();
+    setError('');
+    setSuccess('');
+
+    if (!otpCode || otpCode.trim().length !== 6) {
+      setError('Please enter the 6-digit OTP code sent to your email.');
+      return;
+    }
+
+    try {
+      setLoading(true);
+      await axios.get(`http://localhost:8080/api/v1/auth/verify-email?token=${otpCode.trim()}`);
+      setSuccess('Account verified & created successfully! Redirecting to login...');
+      setTimeout(() => {
+        navigate('/login');
+      }, 1500);
+    } catch (err) {
+      const serverMessage = err.response?.data?.message || 'Invalid or expired OTP verification code. Please try again.';
+      setError(serverMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className="min-vh-100 d-flex align-items-center justify-content-center py-5 position-relative" style={{ background: 'linear-gradient(180deg, #FAF8FF 0%, #FFFFFF 100%)', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-      <div className="container position-relative" style={{ zIndex: 1 }}>
+    <div className="min-vh-100 d-flex flex-column justify-content-between py-4 bg-white text-dark" 
+      style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+
+      {/* Header Brand */}
+      <div className="container">
+        <div className="d-flex align-items-center justify-content-between py-2">
+          <Link className="d-inline-flex align-items-center fw-extrabold fs-4 text-decoration-none text-dark gap-2" to="/">
+            <div className="rounded-3 p-2 bg-purple text-white d-flex align-items-center justify-content-center shadow-sm" 
+              style={{ width: '38px', height: '38px', background: '#7C3AED' }}>
+              <i className="bi bi-flower1 fs-5"></i>
+            </div>
+            <span className="fw-extrabold tracking-tight text-dark" style={{ fontFamily: "'Outfit', sans-serif" }}>
+              Nixtap<span style={{ color: '#7C3AED' }}>.</span>
+            </span>
+          </Link>
+
+          <Link to="/login" className="btn btn-sm btn-outline-dark rounded-pill px-3.5 py-1.5 fw-bold">
+            Sign In
+          </Link>
+        </div>
+      </div>
+
+      {/* Main Content Form */}
+      <div className="container my-auto py-4">
         <div className="row align-items-center g-5 justify-content-center">
+          
+          {/* Left Column Playful Showcase */}
           <div className="col-12 col-lg-6 col-xl-5 d-none d-lg-block">
             <div className="pe-xl-4">
-              <Link className="d-flex align-items-center fw-extrabold text-dark fs-3 mb-4 text-decoration-none" to="/">
-                <span className="p-2 radius-sm bg-pastel-purple text-white me-2 d-inline-flex align-items-center justify-content-center" style={{ width: '36px', height: '36px' }}>
-                  <i className="bi bi-layers-half fs-5"></i>
-                </span>
-                <span className="fw-bold tracking-tight">Nixtap.</span>
-              </Link>
+              
+              <div className="d-inline-flex align-items-center gap-2 px-3 py-1.5 rounded-pill bg-pastel-lavender text-purple fw-bold small mb-4">
+                <i className="bi bi-stars"></i>
+                <span>Get started with Nixtap</span>
+              </div>
 
-              <h1 className="fw-extrabold text-dark display-4 mb-3 lh-tight" style={{ letterSpacing: '-0.02em' }}>
-                Create Your <span className="text-purple accent-underline">Identity</span>
+              <h1 className="display-4 fw-extrabold text-dark mb-3 tracking-tight" style={{ fontFamily: "'Outfit', sans-serif", lineHeight: 1.15 }}>
+                Create your digital <br />
+                <span className="position-relative d-inline-block px-3 py-1 me-2 rounded-4 text-purple mt-1" 
+                  style={{ background: 'rgba(124, 58, 237, 0.12)', color: '#7C3AED', transform: 'rotate(-1.5deg)' }}>
+                  professional identity
+                </span>
               </h1>
-              <p className="text-secondary fs-5 mb-4" style={{ color: '#475569' }}>
-                Build your digital business card in 30 seconds. Share via NFC tap, QR code, or public URL and watch real-time analytics.
+
+              <p className="text-secondary fs-6 mb-4 leading-relaxed">
+                Join thousands of creators, engineers, and leaders who share their digital cards, portfolio, and contact details with one simple tap.
               </p>
 
+              {/* Badges */}
               <div className="d-flex flex-wrap gap-2 mb-4">
-                <span className="floating-tag bg-pastel-lavender text-purple">
-                  <i className="bi bi-person-badge"></i> #DigitalIdentity
+                <span className="badge rounded-pill px-3 py-2 fw-bold text-purple" style={{ background: '#EDE9FE' }}>
+                  <i className="bi bi-shield-check me-1"></i> #InstantSetup
                 </span>
-                <span className="floating-tag bg-pastel-soft-yellow text-dark">
-                  <i className="bi bi-lightning-charge"></i> #ZeroFriction
+                <span className="badge rounded-pill px-3 py-2 fw-bold" style={{ background: '#FEF08A', color: '#854D0E' }}>
+                  <i className="bi bi-person-badge me-1"></i> #CustomHandle
                 </span>
-                <span className="floating-tag bg-pastel-mint text-success">
-                  <i className="bi bi-shield-check"></i> #Encrypted
+                <span className="badge rounded-pill px-3 py-2 fw-bold" style={{ background: '#FCE7F3', color: '#9D174D' }}>
+                  <i className="bi bi-globe me-1"></i> #MiniPortfolio
                 </span>
               </div>
 
-              <div className="p-4 bg-white rounded-4 border border-slate-200 shadow-sm">
-                <div className="d-flex gap-3 align-items-center mb-2">
-                  <span className="p-2 rounded-circle bg-pastel-lavender text-purple d-inline-flex align-items-center justify-content-center" style={{ width: '36px', height: '36px' }}>
-                    <i className="bi bi-sparkles"></i>
-                  </span>
+              {/* Clean Testimonial Card */}
+              <div className="p-4 rounded-5 border border-slate-200 bg-light shadow-sm">
+                <div className="d-flex gap-3 align-items-center mb-3">
+                  <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=120&q=80" 
+                    alt="Jenny Wilson" className="rounded-circle border" style={{ width: '48px', height: '48px', objectFit: 'cover' }} />
                   <div>
-                    <div className="fw-bold text-dark small">100% Free Account</div>
-                    <div className="extra-small text-muted">Unlimited card updates · Real-time scans</div>
+                    <div className="fw-extrabold text-dark small">Jenny Wilson</div>
+                    <div className="extra-small text-muted">Creative Director</div>
                   </div>
                 </div>
+                <p className="text-secondary extra-small mb-0 fst-italic leading-relaxed">
+                  "The clean white playful aesthetic and instantaneous NFC tap sharing make networking super fun and memorable."
+                </p>
               </div>
+
             </div>
           </div>
 
+          {/* Right Column Form Card */}
           <div className="col-12 col-lg-6 col-xl-5">
-            <div className="bg-white rounded-4 border border-slate-200 shadow-xl overflow-hidden p-4 p-sm-5">
-              <div className="text-center mb-4">
-                <Link className="d-lg-none d-flex align-items-center justify-content-center fw-extrabold fs-3 mb-3 text-decoration-none text-dark" to="/">
-                  <span className="p-2 radius-sm bg-pastel-purple text-white me-2 d-inline-flex align-items-center justify-content-center" style={{ width: '32px', height: '32px' }}>
-                    <i className="bi bi-layers-half"></i>
-                  </span>
-                  <span>Nixtap.</span>
-                </Link>
-                <h3 className="fw-extrabold text-dark mb-1">Create Account</h3>
-                <p className="mb-0 text-secondary small">Join Nixtap microservice platform</p>
+            <div className="border border-slate-200 rounded-5 shadow-sm p-4 p-sm-5 bg-white position-relative">
+              
+              <div className="mb-4">
+                <h2 className="fw-extrabold text-dark mb-1" style={{ fontFamily: "'Outfit', sans-serif" }}>
+                  {step === 1 ? 'Register Account' : 'Verify Email OTP'}
+                </h2>
+                <p className="text-secondary small">
+                  {step === 1 ? 'Set up your profile credentials in seconds' : `Enter 6-digit code sent to ${formData.email}`}
+                </p>
               </div>
 
               {error && (
-                <div className="alert alert-danger alert-dismissible fade show d-flex align-items-center mb-4 small rounded-3" role="alert">
-                  <i className="bi bi-exclamation-triangle-fill me-2 fs-6"></i>
+                <div className="alert alert-danger rounded-4 border-0 small py-3 px-3.5 mb-4 d-flex align-items-center gap-2">
+                  <i className="bi bi-exclamation-triangle-fill fs-6 flex-shrink-0"></i>
                   <div>{error}</div>
-                  <button
-                    type="button"
-                    className="btn-close"
-                    onClick={() => setError('')}
-                    aria-label="Close"
-                  ></button>
                 </div>
               )}
 
               {success && (
-                <div className="alert alert-success alert-dismissible fade show d-flex align-items-center mb-4 small rounded-3" role="alert">
-                  <i className="bi bi-check-circle-fill me-2 fs-6"></i>
+                <div className="alert alert-success rounded-4 border-0 small py-3 px-3.5 mb-4 d-flex align-items-center gap-2">
+                  <i className="bi bi-check-circle-fill fs-6 flex-shrink-0"></i>
                   <div>{success}</div>
                 </div>
               )}
 
-              <form onSubmit={handleSubmit} noValidate>
-                <div className="mb-3">
-                  <label htmlFor="fullName" className="form-label small fw-bold text-dark">
-                    Full Name <span className="text-danger">*</span>
-                  </label>
-                  <div className="input-group">
-                    <span className="input-group-text bg-light border-end-0">
-                      <i className="bi bi-person text-muted"></i>
-                    </span>
-                    <input
-                      type="text"
-                      id="fullName"
-                      name="fullName"
-                      className="form-control border-start-0"
-                      placeholder="John Doe"
-                      value={formData.fullName}
-                      onChange={handleChange}
-                      minLength={2}
-                      maxLength={100}
-                      required
-                      disabled={loading}
-                    />
+              {step === 1 ? (
+                <form onSubmit={handleSubmit}>
+                  <div className="mb-3.5">
+                    <label className="form-label text-dark fw-bold extra-small mb-1.5">Full Name</label>
+                    <div className="input-group">
+                      <span className="input-group-text bg-light border-slate-200 text-muted rounded-start-4 border-end-0 px-3">
+                        <i className="bi bi-person"></i>
+                      </span>
+                      <input
+                        type="text"
+                        name="fullName"
+                        className="form-control bg-light border-slate-200 text-dark rounded-end-4 py-2.5 px-3 text-sm focus-ring-purple"
+                        placeholder="John Doe"
+                        value={formData.fullName}
+                        onChange={handleChange}
+                        required
+                      />
+                    </div>
                   </div>
-                </div>
 
-                <div className="mb-3">
-                  <label htmlFor="email" className="form-label small fw-bold text-dark">
-                    Email Address <span className="text-danger">*</span>
-                  </label>
-                  <div className="input-group">
-                    <span className="input-group-text bg-light border-end-0">
-                      <i className="bi bi-envelope text-muted"></i>
-                    </span>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      className="form-control border-start-0"
-                      placeholder="name@example.com"
-                      value={formData.email}
-                      onChange={handleChange}
-                      required
-                      disabled={loading}
-                    />
+                  <div className="mb-3.5">
+                    <label className="form-label text-dark fw-bold extra-small mb-1.5">Email Address</label>
+                    <div className="input-group">
+                      <span className="input-group-text bg-light border-slate-200 text-muted rounded-start-4 border-end-0 px-3">
+                        <i className="bi bi-envelope"></i>
+                      </span>
+                      <input
+                        type="email"
+                        name="email"
+                        className="form-control bg-light border-slate-200 text-dark rounded-end-4 py-2.5 px-3 text-sm focus-ring-purple"
+                        placeholder="name@example.com"
+                        value={formData.email}
+                        onChange={handleChange}
+                        required
+                      />
+                    </div>
                   </div>
-                </div>
 
-                <div className="mb-4">
-                  <label htmlFor="password" className="form-label small fw-bold text-dark">
-                    Password <span className="text-danger">*</span>
-                  </label>
-                  <div className="input-group">
-                    <span className="input-group-text bg-light border-end-0">
-                      <i className="bi bi-lock text-muted"></i>
-                    </span>
-                    <input
-                      type="password"
-                      id="password"
-                      name="password"
-                      className="form-control border-start-0"
-                      placeholder="Create password (min 8 chars)"
-                      value={formData.password}
-                      onChange={handleChange}
-                      minLength={8}
-                      maxLength={32}
-                      required
-                      disabled={loading}
-                    />
+                  <div className="mb-4">
+                    <label className="form-label text-dark fw-bold extra-small mb-1.5">Password</label>
+                    <div className="input-group">
+                      <span className="input-group-text bg-light border-slate-200 text-muted rounded-start-4 border-end-0 px-3">
+                        <i className="bi bi-lock"></i>
+                      </span>
+                      <input
+                        type="password"
+                        name="password"
+                        className="form-control bg-light border-slate-200 text-dark rounded-end-4 py-2.5 px-3 text-sm focus-ring-purple"
+                        placeholder="At least 8 characters"
+                        value={formData.password}
+                        onChange={handleChange}
+                        required
+                      />
+                    </div>
                   </div>
-                </div>
 
-                <div className="d-grid mt-4">
                   <button
                     type="submit"
-                    className="btn bg-pastel-purple text-white fw-bold py-3 rounded-pill shadow-sm d-flex align-items-center justify-content-center gap-2"
-                    style={{ background: '#7C3AED' }}
                     disabled={loading}
+                    className="btn text-white w-100 py-3 fw-bold rounded-pill shadow-sm border-0 d-flex align-items-center justify-content-center gap-2 transition-all"
+                    style={{ background: '#7C3AED' }}
                   >
                     {loading ? (
                       <>
                         <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                        <span>Creating Account...</span>
+                        <span>Sending OTP Code...</span>
                       </>
                     ) : (
                       <>
-                        <span>Get Started Free</span>
-                        <i className="bi bi-arrow-right"></i>
+                        <span>Get Verification OTP</span>
+                        <i className="bi bi-arrow-right-short fs-5"></i>
                       </>
                     )}
                   </button>
-                </div>
-              </form>
+                </form>
+              ) : (
+                <form onSubmit={handleOtpVerify}>
+                  <div className="mb-4 text-center">
+                    <label className="form-label text-dark fw-bold extra-small mb-2">6-Digit Verification Code</label>
+                    <input
+                      type="text"
+                      maxLength={6}
+                      className="form-control text-center fw-extrabold fs-3 bg-light border-slate-200 text-dark rounded-4 py-3 tracking-widest focus-ring-purple"
+                      placeholder="000000"
+                      value={otpCode}
+                      onChange={(e) => setOtpCode(e.target.value.replace(/[^0-9]/g, ''))}
+                      required
+                    />
+                    <div className="extra-small text-muted mt-2">
+                      Didn't receive email? Check spam folder or <button type="button" onClick={() => setStep(1)} className="btn btn-link p-0 extra-small text-purple fw-bold text-decoration-none">click here to retry</button>.
+                    </div>
+                  </div>
 
-              <div className="text-center pt-4 border-top mt-4">
-                <p className="mb-0 text-muted small">
+                  <button
+                    type="submit"
+                    disabled={loading || otpCode.length !== 6}
+                    className="btn text-white w-100 py-3 fw-bold rounded-pill shadow-sm border-0 d-flex align-items-center justify-content-center gap-2 transition-all"
+                    style={{ background: '#7C3AED' }}
+                  >
+                    {loading ? (
+                      <>
+                        <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        <span>Verifying OTP...</span>
+                      </>
+                    ) : (
+                      <>
+                        <i className="bi bi-shield-check fs-5 me-1"></i>
+                        <span>Verify &amp; Activate Account</span>
+                      </>
+                    )}
+                  </button>
+                </form>
+              )}
+
+              <div className="mt-4 pt-3 border-top border-slate-100 text-center">
+                <p className="text-secondary extra-small mb-0">
                   Already have an account?{' '}
-                  <Link to="/login" className="text-purple fw-bold text-decoration-none">
-                    Sign In
+                  <Link to="/login" className="fw-bold text-purple text-decoration-none">
+                    Sign In instead
                   </Link>
                 </p>
               </div>
+
             </div>
+          </div>
+
+        </div>
+      </div>
+
+      {/* Footer Minimal */}
+      <div className="container">
+        <div className="d-flex flex-column flex-sm-row align-items-center justify-content-between py-3 border-top border-slate-100 extra-small text-muted">
+          <div>&copy; {new Date().getFullYear()} Nixtap Platform Inc. All rights reserved.</div>
+          <div className="d-flex gap-3 mt-2 mt-sm-0">
+            <Link to="/" className="text-muted text-decoration-none">Privacy</Link>
+            <Link to="/" className="text-muted text-decoration-none">Terms</Link>
+            <Link to="/" className="text-muted text-decoration-none">Support</Link>
           </div>
         </div>
       </div>
+
     </div>
   );
 };

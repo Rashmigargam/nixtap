@@ -6,6 +6,17 @@ export const getUserCards = async () => {
   return res.data;
 };
 
+// 1b. getPublicUserCards(userId) -> GET /api/v1/cards/public/user/{userId}
+export const getPublicUserCards = async (userId) => {
+  try {
+    const id = userId || 1;
+    const res = await api.get(`/api/v1/cards/public/user/${id}`);
+    return res.data?.data || res.data;
+  } catch {
+    return [];
+  }
+};
+
 // 2. createCard(data) -> POST /api/v1/cards
 export const createCard = async (data) => {
   const res = await api.post('/api/v1/cards', data);

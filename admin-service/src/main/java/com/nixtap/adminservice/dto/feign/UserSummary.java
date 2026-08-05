@@ -10,4 +10,9 @@ public class UserSummary {
     private String role;
     private boolean enabled;
     private boolean emailVerified;
+    private String username;
+    private boolean isPublic = true;
+    private String designation;
+    private String company;
+    private String profileImage;
 }

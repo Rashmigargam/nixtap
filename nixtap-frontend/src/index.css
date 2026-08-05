@@ -919,3 +919,24 @@ h4 { font-weight: 700; }
   box-shadow: 0 8px 20px rgba(124, 58, 237, 0.08);
 }
 
+.app-bg {
+  background-color: #FAFAFC;
+}
+
+.btn-purple {
+  background-color: #7C3AED;
+  color: #ffffff;
+  border: 0;
+}
+.btn-purple:hover {
+  background-color: #6D28D9;
+  color: #ffffff;
+}
+
+.bg-pastel-purple {
+  background-color: #EDE9FE !important;
+}
+.text-purple-dark {
+  color: #6D28D9 !important;
+}
+
