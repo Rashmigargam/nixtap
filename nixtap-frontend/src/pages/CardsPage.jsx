@@ -301,11 +301,31 @@ const CardsPage = () => {
                         {/* Title & Info */}
                         <div className="col-12 col-lg-5">
                           <div className="d-flex align-items-center gap-3">
-                            <div
-                              className="rounded-3 p-2 text-white fw-bold d-inline-flex align-items-center justify-content-center flex-shrink-0 shadow-sm"
-                              style={{ width: '40px', height: '40px', background: card.customGradient || 'linear-gradient(135deg, #7C3AED 0%, #4338CA 100%)' }}
-                            >
-                              {(card.cardTitle || 'C').charAt(0).toUpperCase()}
+                            <div className="position-relative flex-shrink-0">
+                              {card.profileImage || user?.avatarUrl || localStorage.getItem('nixtap_profile_avatar') ? (
+                                <img
+                                  src={card.profileImage || user?.avatarUrl || localStorage.getItem('nixtap_profile_avatar')}
+                                  alt={card.cardTitle || 'Profile'}
+                                  className="rounded-circle object-fit-cover border shadow-sm"
+                                  style={{ width: '44px', height: '44px' }}
+                                  onError={(e) => {
+                                    e.target.onerror = null;
+                                    e.target.style.display = 'none';
+                                    e.target.nextSibling.style.display = 'flex';
+                                  }}
+                                />
+                              ) : null}
+                              <div
+                                className="rounded-circle p-2 text-white fw-bold d-inline-flex align-items-center justify-content-center flex-shrink-0 shadow-sm"
+                                style={{
+                                  width: '44px',
+                                  height: '44px',
+                                  background: card.customGradient || 'linear-gradient(135deg, #7C3AED 0%, #4338CA 100%)',
+                                  display: (card.profileImage || user?.avatarUrl || localStorage.getItem('nixtap_profile_avatar')) ? 'none' : 'flex',
+                                }}
+                              >
+                                {(card.cardTitle || user?.fullName || 'C').charAt(0).toUpperCase()}
+                              </div>
                             </div>
                             <div className="overflow-hidden">
                               <h6 className="fw-extrabold text-dark mb-0.5 text-truncate" style={{ fontFamily: "'Outfit', sans-serif" }}>{card.cardTitle}</h6>

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import NotificationDrawer from './notifications/NotificationDrawer';
-import ServiceStatusBanner from './common/ServiceStatusBanner';
 
 const MainLayout = () => {
   const { user, logout } = useAuth();
@@ -33,7 +32,6 @@ const MainLayout = () => {
 
   return (
     <div className="app-bg min-vh-100 d-flex flex-column">
-      <ServiceStatusBanner />
 
       {/* ── TOP NAVBAR ──────────────────────────────────────────────────── */}
       <nav className="navbar navbar-expand-lg bg-white sticky-top" style={{ borderBottom: '1px solid #e2e8f0', minHeight: '60px' }}>

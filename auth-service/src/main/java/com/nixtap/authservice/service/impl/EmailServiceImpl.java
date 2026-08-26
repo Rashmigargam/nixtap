@@ -51,18 +51,17 @@ public class EmailServiceImpl implements EmailService {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setFrom(fromEmail);
             message.setTo(toEmail);
-            message.setSubject("Reset your Nixtap password");
+            message.setSubject("Your Nixtap Password Reset OTP Code");
             message.setText(
                     "Hello,\n\n" +
                             "We received a request to reset your Nixtap account password.\n\n" +
-                            "Use the token below to reset your password (valid for 2 hours):\n\n" +
-                            resetToken + "\n\n" +
-                            "Or click the link:\n" +
-                            baseUrl + "/api/v1/auth/reset-password?token=" + resetToken + "\n\n" +
+                            "Your 6-digit Password Reset OTP code is:\n\n" +
+                            "    >>> " + resetToken + " <<<\n\n" +
+                            "This OTP code is valid for 15 minutes.\n\n" +
                             "If you did not request a password reset, please ignore this email.\n\n" +
                             "— The Nixtap Team");
             mailSender.send(message);
-            log.info("Password reset email sent to {}", toEmail);
+            log.info("Password reset OTP email sent to {}", toEmail);
         } catch (MailException e) {
             log.error("Failed to send password reset email to {}: {}", toEmail, e.getMessage());
             throw new RuntimeException("Failed to send password reset email. Please try again later.");

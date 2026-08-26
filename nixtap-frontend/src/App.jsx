@@ -9,6 +9,7 @@ import ErrorBoundary from './components/common/ErrorBoundary';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import Dashboard from './pages/Dashboard';
 import ProfilePage from './pages/ProfilePage';
 import CardsPage from './pages/CardsPage';
@@ -30,6 +31,7 @@ function App() {
           {/* Unauthenticated Public Routes */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
           <Route
             path="/card/:cardId"
             element={

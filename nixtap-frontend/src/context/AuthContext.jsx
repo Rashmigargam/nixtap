@@ -130,7 +130,19 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // 4. User State Sync: Update user data when profile is edited
+  // 4. forgotPassword(email) -> Calls POST /api/v1/auth/forgot-password
+  const forgotPassword = async (email) => {
+    const response = await api.post('/api/v1/auth/forgot-password', { email });
+    return response.data;
+  };
+
+  // 5. resetPassword(token, newPassword) -> Calls POST /api/v1/auth/reset-password
+  const resetPassword = async (token, newPassword) => {
+    const response = await api.post('/api/v1/auth/reset-password', { token, newPassword });
+    return response.data;
+  };
+
+  // 6. User State Sync: Update user data when profile is edited
   const updateUserData = (updatedFields) => {
     setUser((prevUser) => {
       const newUser = { ...prevUser, ...updatedFields };
@@ -145,6 +157,8 @@ export const AuthProvider = ({ children }) => {
     login,
     register,
     logout,
+    forgotPassword,
+    resetPassword,
     updateUserData,
     isAuthenticated: !!user && !!localStorage.getItem('accessToken'),
   };

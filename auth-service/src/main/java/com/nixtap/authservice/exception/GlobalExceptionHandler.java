@@ -32,6 +32,32 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, status);
     }
 
+    @ExceptionHandler(org.springframework.security.authentication.DisabledException.class)
+    public ResponseEntity<ErrorResponse> handleDisabledException(
+            org.springframework.security.authentication.DisabledException ex, HttpServletRequest request) {
+        ErrorResponse error = ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.FORBIDDEN.value())
+                .message("Your account is disabled or email is unverified. Please verify your email or contact support.")
+                .path(request.getServletPath())
+                .errorCode("ACCOUNT_DISABLED")
+                .build();
+        return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(org.springframework.security.authentication.BadCredentialsException.class)
+    public ResponseEntity<ErrorResponse> handleBadCredentials(
+            org.springframework.security.authentication.BadCredentialsException ex, HttpServletRequest request) {
+        ErrorResponse error = ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.UNAUTHORIZED.value())
+                .message("Invalid email or password. Please check your credentials.")
+                .path(request.getServletPath())
+                .errorCode("BAD_CREDENTIALS")
+                .build();
+        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+    }
+
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<ErrorResponse> handleBadRequest(BadRequestException ex, HttpServletRequest request) {
         ErrorResponse error = ErrorResponse.builder()

@@ -33,11 +33,21 @@ const MediaUploader = ({
       return;
     }
 
-    // Instant local preview
-    const localUrl = URL.createObjectURL(file);
-    setPreviewUrl(localUrl);
+    // Convert file to base64 Data URL for persistent storage & frontend rendering
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const dataUrl = e.target.result;
+      setPreviewUrl(dataUrl);
+      try {
+        localStorage.setItem('nixtap_profile_avatar', dataUrl);
+      } catch (err) {
+        console.warn('LocalStorage avatar quota exceeded:', err);
+      }
+      onUploadSuccess?.(dataUrl);
+    };
+    reader.readAsDataURL(file);
 
-    // Perform upload
+    // Perform upload to backend as well
     performUpload(file);
   };
 
@@ -90,6 +100,7 @@ const MediaUploader = ({
 
   const handleClear = () => {
     setPreviewUrl('');
+    localStorage.removeItem('nixtap_profile_avatar');
     onUploadSuccess?.('');
     if (fileInputRef.current) {
       fileInputRef.current.value = '';

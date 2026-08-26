@@ -164,17 +164,19 @@ public class AuthServiceImpl implements AuthService {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + request.getEmail()));
 
         passwordResetTokenRepository.deleteByUser(user);
+        passwordResetTokenRepository.flush();
 
-        String token = UUID.randomUUID().toString();
+        // Generate 6-digit numeric OTP code
+        String token = String.format("%06d", new java.security.SecureRandom().nextInt(1000000));
         PasswordResetToken resetToken = PasswordResetToken.builder()
                 .token(token)
                 .user(user)
-                .expiryDate(LocalDateTime.now().plusHours(2))
+                .expiryDate(LocalDateTime.now().plusMinutes(15))
                 .build();
 
         passwordResetTokenRepository.save(resetToken);
 
-        // Send password reset email
+        // Send password reset email with 6-digit OTP code
         emailService.sendPasswordResetEmail(user.getEmail(), token);
     }
 

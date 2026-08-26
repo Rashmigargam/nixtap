@@ -78,6 +78,10 @@ const PublicProfilePage = ({ defaultTab = 'overview' }) => {
       }
 
       const targetUserId = profileData.userId;
+      const savedLocalAvatar = localStorage.getItem('nixtap_profile_avatar');
+      if (savedLocalAvatar && (!profileData.profileImage || profileData.profileImage.startsWith('blob:'))) {
+        profileData.profileImage = savedLocalAvatar;
+      }
       setUserProfile(profileData);
 
       const [portRes, socialRes, cardsRes, fbRes, sumRes] = await Promise.allSettled([
